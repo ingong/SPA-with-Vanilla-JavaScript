@@ -8,5 +8,11 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': 'error',
+    'no-unused-vars': 'warn',
+  },
+  parser: '@babel/eslint-parser',
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 2015,
   },
 };
