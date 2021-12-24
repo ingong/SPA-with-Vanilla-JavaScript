@@ -2,13 +2,19 @@ import Component from '@/common/component';
 
 export default class KanbanItem extends Component {
   template() {
+    console.log(this.$state);
     return `
     <article>
-      <p>${this.$state.id}</p>
+      <p></p>
       <h5>${this.$state.title}</h5>
       <span>${this.$state.inChargePerson}</span>
-      <span>${this.$state.modifTime}</span>
+      <span></span>
     </article>
     `;
   }
+}
+
+{
+  /* <p>${this.$state.id}</p>
+<span>${this.$state.modifTime}</span> */
 }
