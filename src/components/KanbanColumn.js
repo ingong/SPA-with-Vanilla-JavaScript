@@ -6,13 +6,17 @@ export default class KanbanColumn extends Component {
   template() {
     return `
     <section class="kanban-column">
-      <h3>${this.$state.name}</h3>
+      <div class="kanban-column__title ${this.$state.name}-title">
+        <h3>${this.$state.name}</h3>
+      </div>
       <ul class=${this.$state.name}-list></ul>
     </section>
     `;
   }
 
   renderChildren() {
+    new KanbanAddbtn(`.${this.$state.name}-title`);
+
     this.$state.list?.map(
       (value) =>
         new KanbanItem(`.${this.$state.name}-list`, {
