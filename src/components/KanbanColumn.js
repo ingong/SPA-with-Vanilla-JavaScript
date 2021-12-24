@@ -15,7 +15,7 @@ export default class KanbanColumn extends Component {
   }
 
   renderChildren() {
-    new KanbanAddbtn(`.${this.$state.name}-title`);
+    new KanbanAddbtn(`.${this.$state.name}-title`, this.$state.name);
 
     this.$state.list?.map(
       (value) =>

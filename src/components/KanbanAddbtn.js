@@ -1,9 +1,13 @@
 import Component from '@/common/Component';
-
+import { qs } from '@/utils/helper';
 export default class KanbanAddbtn extends Component {
   template() {
     return `
-      <button class='kanban-add'>항목 추가</button>
+      <button class='addBtn ${this.$state}-addbtn'>항목 추가</button>
     `;
+  }
+
+  setEvent() {
+    qs(`.${this.$state}-addbtn`).addEventListener('click', () => console.log('clicked'));
   }
 }
