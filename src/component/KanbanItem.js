@@ -2,19 +2,21 @@ import Component from '@/common/component';
 
 export default class KanbanItem extends Component {
   template() {
-    console.log(this.$state);
     return `
-    <article>
-      <p></p>
-      <h5>${this.$state.title}</h5>
-      <span>${this.$state.inChargePerson}</span>
-      <span></span>
+    <article class="kanban-item">
+      <div class="item-top">
+        <p>ISSUE-104</p>
+        <div class="item-top-btn">
+          <button>수정</button>
+          <button>삭제</button>
+        </div>
+      </div>
+      <h5>${this.$state.title}</h5>      
+      <div class="item-bottom">
+        <span>${this.$state.inChargePerson}</span>
+        <span>수정 일시</span>
+      </div> 
     </article>
     `;
   }
-}
-
-{
-  /* <p>${this.$state.id}</p>
-<span>${this.$state.modifTime}</span> */
 }
