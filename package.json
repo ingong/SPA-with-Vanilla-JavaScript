@@ -1,10 +1,11 @@
 {
-  "name": "FE",
+  "name": "kanbanboard",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack-dev-server --progress",
+    "build": "webpack --mode=production"
   },
   "repository": {
     "type": "git",
