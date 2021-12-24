@@ -1,4 +1,5 @@
 import KanbanBoard from '@/component/KanbanBoard';
+import '@/style/index.css';
 
 const App = {
   init: () => new KanbanBoard('#root'),

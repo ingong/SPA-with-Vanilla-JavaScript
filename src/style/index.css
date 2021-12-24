@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+html,
+body {
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+main {
+  max-width: 1080px;
+  margin: 0 auto;
+  margin-top: 60px;
+}
