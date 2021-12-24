@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/ingong/FE/issues"
   },
-  "homepage": "https://github.com/ingong/FE#readme"
+  "homepage": "https://github.com/ingong/FE#readme",
+  "devDependencies": {
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  }
 }
