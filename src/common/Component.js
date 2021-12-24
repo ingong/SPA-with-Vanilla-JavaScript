@@ -5,16 +5,23 @@ export default class Component {
   $state;
   constructor($target, $state) {
     this.$target = $target;
-    this.$state = $state;
+    this.setInitialState($state);
     this.render();
+    this.renderChildren();
     this.setEvent();
+  }
+
+  setInitialState(state) {
+    this.$state = state;
   }
 
   template() {}
 
   render() {
-    qs(this.$target).innerHTML = this.template();
+    qs(this.$target).insertAdjacentHTML('beforeend', this.template());
   }
+
+  renderChildren() {}
 
   setEvent() {}
 }
