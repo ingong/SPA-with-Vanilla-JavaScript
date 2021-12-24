@@ -1,4 +1,4 @@
-import Component from '@/common/component';
+import Component from '@/common/Component';
 
 export default class KanbanItem extends Component {
   template() {

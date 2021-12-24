@@ -1,4 +1,4 @@
-import KanbanBoard from '@/component/KanbanBoard';
+import KanbanBoard from '@/components/KanbanBoard';
 import '@/style/index.css';
 
 const App = {

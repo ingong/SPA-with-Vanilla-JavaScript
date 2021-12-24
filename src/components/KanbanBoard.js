@@ -1,5 +1,5 @@
-import Component from '@/common/component';
-import KanbanColumn from '@/component/KanbanColumn';
+import Component from '@/common/Component';
+import KanbanColumn from '@/components/KanbanColumn';
 import store from '@/store';
 import '@/style/kanban.css';
 

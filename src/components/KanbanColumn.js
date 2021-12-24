@@ -1,5 +1,7 @@
-import Component from '@/common/component';
-import KanbanItem from '@/component/KanbanItem';
+import Component from '@/common/Component';
+import KanbanItem from '@/components/KanbanItem';
+import KanbanAddbtn from '@/components/KanbanAddbtn';
+
 export default class KanbanColumn extends Component {
   template() {
     return `
