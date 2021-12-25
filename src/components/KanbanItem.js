@@ -22,17 +22,19 @@ export default class KanbanItem extends Component {
     `;
   }
 
+  setDeleteModal() {
+    const deleteModal = new DeleteModal('.kanban-container', { category: 'deleteModal' });
+    deleteModal.renderChildren(this.$state.id);
+    qs('.deleteModal').classList.remove('hidden');
+  }
+
   setEvent() {
     const itemSelector = qs(`.${this.$state.id}`);
     const useRefSelector = qs('.useRef');
-    const modifyBtnSelector = qs('.item__modify', itemSelector);
     const deleteBtnSelector = qs('.item__delete', itemSelector);
+    const modifyBtnSelector = qs('.item__modify', itemSelector);
 
-    deleteBtnSelector.addEventListener('click', () => {
-      const deleteModal = new DeleteModal('.kanban-container', { category: 'deleteModal' });
-      deleteModal.renderChildren(this.$state.id);
-      qs('.deleteModal').classList.remove('hidden');
-    });
+    deleteBtnSelector.addEventListener('click', () => this.setDeleteModal());
 
     itemSelector.addEventListener('dragenter', () => {
       if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
