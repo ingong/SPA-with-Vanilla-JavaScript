@@ -23,7 +23,7 @@ export default class Modal extends Component {
     const closeModal = () => qs('.modal').classList.add('hidden');
     const confirmModalBtn = () => {
       closeModal();
-      store.dispatch(deleteItem('ISSUE-104'));
+      store.dispatch(deleteItem({ id: 'ISSUE-104' }));
     };
 
     qs('.modal__overlay').addEventListener('click', closeModal);
