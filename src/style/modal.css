@@ -1,4 +1,4 @@
-.modal {
+.modal__container {
   position: fixed;
   top: 0;
   left: 0;
@@ -20,7 +20,7 @@
   align-items: center;
 }
 
-.modal__content {
+.modal {
   width: 30%;
   background-color: white;
   display: flex;
