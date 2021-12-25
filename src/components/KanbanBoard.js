@@ -1,17 +1,23 @@
 import Component from '@/common/Component';
+import { qs } from '@/utils/helper';
 import KanbanColumn from '@/components/KanbanColumn';
-import store from '@/store';
+import Modal from '@/common/Modal';
+import { store, storeInit } from '@/store/index';
 import '@/style/kanban.css';
 
 export default class KanbanBoard extends Component {
   template() {
     return `
-    <main>
-      <h1>칸반 보드</h1>
-      <section class="kanban-container">
-      </section>
-    </main>
+      <main>
+        <h1>칸반 보드</h1>
+        <section class="kanban-container">
+        </section>
+      </main>
     `;
+  }
+
+  cleanUpChildren() {
+    qs('.kanban-container').innerHTML = '';
   }
 
   renderChildren() {
@@ -19,24 +25,15 @@ export default class KanbanBoard extends Component {
       (value) =>
         new KanbanColumn('.kanban-container', {
           name: value,
-          list: this.$state.filter((v) => v.status === value),
+          list: store.getState()?.filter((v) => v.status === value),
         }),
     );
+    new Modal('.kanban-container');
   }
 
-  setInitialState() {
-    this.$state = store.getState();
-    store.subscribe(this.setState.bind(this));
-    store.dispatch({
-      type: 'init',
-      payload: [
-        { status: 'TODO', title: 'a', inChargePerson: 'insong' },
-        { status: 'IN_PROGRESS', title: 'b', inChargePerson: 'haeryeong' },
-      ],
-    });
-  }
-
-  setState() {
-    this.$state = store.getState() ? store.getState() : [];
+  setUp() {
+    store.subscribe(this.cleanUpChildren.bind(this));
+    store.subscribe(this.renderChildren.bind(this));
+    storeInit();
   }
 }
