@@ -30,6 +30,8 @@ export const reducer = (state = initState, action = {}) => {
       return state.filter((value) => value.id !== action.payload.id);
     case 'UPDATE_ITEM':
       return state.filter((value) => value.id !== action.payload.id).concat(action.payload);
+    case 'CREATE_ITEM':
+      return [...state, action.payload];
     default:
       return state;
   }
