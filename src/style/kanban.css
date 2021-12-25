@@ -60,6 +60,10 @@ h1 {
   transition: 20ms ease-in 0s;
 }
 
+.drag__enter {
+  border-bottom: 4px solid #2d6ecf;
+}
+
 .item-top {
   padding-top: 5px;
   text-align: center;

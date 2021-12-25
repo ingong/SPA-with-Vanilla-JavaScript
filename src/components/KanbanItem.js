@@ -1,9 +1,10 @@
 import Component from '@/common/Component';
+import { qs } from '@/utils/helper';
 
 export default class KanbanItem extends Component {
   template() {
     return `
-    <article class="kanban-item">
+    <article class="kanban-item ${this.$state.id}" data-id=${this.$state.id} data-status=${this.$state.status} draggable=true>
       <div class="item-top">
         <p>${this.$state.id}</p>
         <div class="item-top-btn">
@@ -19,4 +20,26 @@ export default class KanbanItem extends Component {
     </article>
     `;
   }
+
+  setEvent() {
+    const itemSelector = qs(`.${this.$state.id}`);
+    const useRefSelector = qs('.useRef');
+
+    itemSelector.addEventListener('dragenter', () => {
+      if (useRefSelector.id === itemSelector.dataset.id) return;
+      itemSelector.classList.add('drag__enter');
+    });
+
+    itemSelector.addEventListener('dragleave', (e) => {
+      if (Array.from(e.target.classList).includes('drag__enter')) {
+        itemSelector.classList.remove('drag__enter');
+      }
+    });
+
+    itemSelector.addEventListener('drop', (e) => handleDropItem(e));
+
+    itemSelector.addEventListener('dragover', (e) => e.preventDefault());
+  }
 }
+
+const handleDropItem = (e) => console.log(e.currentTarget);
