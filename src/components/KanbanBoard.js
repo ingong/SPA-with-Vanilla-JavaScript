@@ -1,7 +1,6 @@
 import Component from '@/common/Component';
 import { qs } from '@/utils/helper';
 import KanbanColumn from '@/components/KanbanColumn';
-import Modal from '@/common/Modal';
 import { store, storeInit, updateItem } from '@/store/index';
 import '@/style/kanban.css';
 
@@ -32,8 +31,6 @@ export default class KanbanBoard extends Component {
             .sort((a, b) => a.order - b.order),
         }),
     );
-
-    new Modal('.kanban-container');
   }
 
   setEvent() {

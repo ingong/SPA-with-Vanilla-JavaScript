@@ -1,6 +1,7 @@
 import Component from '@/common/Component';
 import { qs } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
+import DeleteModal from '@/components/DeleteModal';
 export default class KanbanItem extends Component {
   template() {
     return `
@@ -8,8 +9,8 @@ export default class KanbanItem extends Component {
       <div class="item-top">
         <p>${this.$state.id}</p>
         <div class="item-top-btn">
-          <button>수정</button>
-          <button>삭제</button>
+          <button class="item__modify">수정</button>
+          <button class="item__delete">삭제</button>
         </div>
       </div>
       <h5>${this.$state.title}</h5>      
@@ -24,6 +25,14 @@ export default class KanbanItem extends Component {
   setEvent() {
     const itemSelector = qs(`.${this.$state.id}`);
     const useRefSelector = qs('.useRef');
+    const modifyBtnSelector = qs('.item__modify', itemSelector);
+    const deleteBtnSelector = qs('.item__delete', itemSelector);
+
+    deleteBtnSelector.addEventListener('click', () => {
+      const deleteModal = new DeleteModal('.kanban-container', { category: 'deleteModal' });
+      deleteModal.renderChildren(this.$state.id);
+      qs('.deleteModal').classList.remove('hidden');
+    });
 
     itemSelector.addEventListener('dragenter', () => {
       if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
