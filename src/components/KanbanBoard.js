@@ -63,17 +63,11 @@ export default class KanbanBoard extends Component {
 const handleDropinColumn = ({ id, status }, itemList) => {
   if (id !== 'column') return;
 
+  const filteredList = itemList.filter((item) => item.status === status);
+  const maxOrder = filteredList.length > 0 ? Math.max(...filteredList.map((item) => item.id)) : -1;
+
   const useRefSelector = qs('.useRef');
   const targetItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
-  store.dispatch(updateItem({ ...targetItem, status, order: 1 }));
 
-  // 칼럼을 기준으로 나눔
-  // if 놓여진 위치가 새로운 컬럼
-  // else if 놓여진 위치가 동일한 칼럼
-  // 둘 다 order 를 최신화해야함
-
-  // 아이템 기준
-  // 아이템의 최상단 -> 2개의 아이템의 변화가 필요함 (첫 번째꺼 0, 두 번째꺼는 기존 : 0 + 기존 두 번째)
-  // 아이템의 중간 -> drop 된 곳을 기준으로 order 를 계산하고 본인것만 최신화
-  // 아이템의 맨 마지막 -> 기존 존재하는 배열에서
+  store.dispatch(updateItem({ ...targetItem, status, order: maxOrder + 1 }));
 };
