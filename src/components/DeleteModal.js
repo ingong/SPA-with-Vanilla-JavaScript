@@ -22,9 +22,8 @@ export default class DeleteModal extends Modal {
 
   handleClose(e) {
     if (
-      e.target.className === 'modal' ||
-      e.target.tagName === 'H4' ||
-      e.target.tagName === 'BUTTON'
+      ['modal__button-container', 'modal', 'modal__content'].includes(e.target.className) ||
+      ['H4', 'BUTTON'].includes(e.target.tagName)
     )
       return;
 
