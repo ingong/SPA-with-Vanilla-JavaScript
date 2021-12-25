@@ -5,7 +5,7 @@ import KanbanAddbtn from '@/components/KanbanAddbtn';
 export default class KanbanColumn extends Component {
   template() {
     return `
-    <section class="kanban-column">
+    <section class="kanban-column" data-status=${this.$state.name} data-id=column>
       <div class="kanban-column__title ${this.$state.name}-title">
         <h3>${this.$state.name}</h3>
       </div>
@@ -15,14 +15,17 @@ export default class KanbanColumn extends Component {
   }
 
   renderChildren() {
-    new KanbanAddbtn(`.${this.$state.name}-title`, this.$state.name);
+    const kanbanColTitleClassName = `.${this.$state.name}-title`;
+    const kanbanListClassName = `.${this.$state.name}-list`;
 
+    new KanbanAddbtn(kanbanColTitleClassName, this.$state.name);
     this.$state.list?.map(
       (value) =>
-        new KanbanItem(`.${this.$state.name}-list`, {
+        new KanbanItem(kanbanListClassName, {
           title: value.title,
           inChargePerson: value.inChargePerson,
           id: value.id,
+          status: value.status,
         }),
     );
   }
