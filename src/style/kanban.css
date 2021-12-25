@@ -37,6 +37,13 @@ h1 {
   align-items: center;
 }
 
+.kanban__column-line {
+  transition: 50ms ease-in 0s;
+  width: 90%;
+  height: 5px;
+  border: 3px;
+}
+
 /* KanbanAddbtn */
 .addBtn {
   padding: 8px;
@@ -47,7 +54,6 @@ h1 {
   width: 90%;
   height: 135px;
   padding: 10px;
-  border-radius: 8px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -57,7 +63,7 @@ h1 {
   border-radius: 3px;
   background-color: #ffffff;
   box-shadow: rgb(15 15 15 / 15%) 0px 0px 0px 0.5px, rgb(15 15 15 / 3%) 0px 2px 3px;
-  transition: 20ms ease-in 0s;
+  transition: 50ms ease-in 0s;
 }
 
 .drag__enter {

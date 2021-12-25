@@ -12,7 +12,7 @@ export default class KanbanBoard extends Component {
         <h1>칸반 보드</h1>
         <section class="kanban-container">
         </section>
-        <div class="useRef" />
+        <div class="useRef"></div>
       </main>
     `;
   }
