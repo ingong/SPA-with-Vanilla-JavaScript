@@ -1,9 +1,13 @@
 import Modal from '@/common/Modal';
 import { qs } from '@/utils/helper';
-import { store, createItem } from '@/store/index';
+import { store, createItem, updateItem } from '@/store/index';
 
 export default class DefaultModal extends Modal {
-  #state = {};
+  $state = {
+    id: '',
+    title: '',
+    inChargeId: '',
+  };
 
   modaltemplate() {
     return `
@@ -17,8 +21,7 @@ export default class DefaultModal extends Modal {
     `;
   }
 
-  renderChildren(id = '') {
-    if (id !== '') this.#state.id = id; // id 로 조회해서 state 에 집어 넣는다
+  renderChildren() {
     this.cleanUpChildren();
     const modalContentSelector = qs('.modal__content');
     modalContentSelector.insertAdjacentHTML('beforeend', this.modaltemplate());
@@ -41,36 +44,34 @@ export default class DefaultModal extends Modal {
   }
 
   handleConfirmBtn(e) {
-    if (Object.keys(this.#state).length === 0) {
-      ['title', 'inChargeId'].map((value) => this.handleWarn(value, true));
-      return;
-    }
-
     let isPossibeForm = true;
-    Object.entries(this.#state).forEach(([key, value]) => {
-      if (value.length < 1) {
+    Object.entries(this.$state).forEach(([key, value]) => {
+      if (key !== 'id' && value.length < 1) {
+        console.log(key, value);
         this.handleWarn(key, true);
         isPossibeForm = false;
       }
     });
     if (!isPossibeForm) return;
 
-    store.dispatch(createItem({ id: 'ISSUE', status: 'TODO', ...this.#state }));
+    if (this.$state.id !== '') store.dispatch(updateItem({ ...this.$state }));
+    else store.dispatch(createItem({ ...this.$state, status: 'TODO', id: 'ISSUE-112' }));
+
     this.handleClose(e);
   }
 
   handleInput(e, category) {
-    this.#state[category] = e.target.value;
+    this.$state[category] = e.target.value;
     if (e.target.value.length < 1) this.handleWarn(category, true);
     else this.handleWarn(category, false);
   }
 
   handleWarn(category, isWarning) {
-    if (isWarning)
+    if (isWarning) {
       qs(`.input__${category}-warn`).textContent = `${
         category === 'title' ? '제목' : '담당자 id'
       }을(를) 입력하세요`;
-    else qs(`.input__${category}-warn`).textContent = '';
+    } else qs(`.input__${category}-warn`).textContent = '';
   }
 
   setEvent() {
@@ -79,5 +80,14 @@ export default class DefaultModal extends Modal {
     qs('.modal__confirm').addEventListener('click', (e) => this.handleConfirmBtn(e));
     qs('.input__title').addEventListener('keyup', (e) => this.handleInput(e, 'title'));
     qs('.input__inChargeId').addEventListener('keyup', (e) => this.handleInput(e, 'inChargeId'));
+  }
+
+  setUp(id) {
+    if (id === undefined) return;
+    const item = store.getState().find((value) => value.id === id);
+    this.$state = item;
+
+    qs('.input__title').value = this.$state.title;
+    qs('.input__inChargeId').value = this.$state.inChargeId;
   }
 }

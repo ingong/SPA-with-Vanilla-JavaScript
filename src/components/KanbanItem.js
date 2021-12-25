@@ -2,6 +2,7 @@ import Component from '@/common/Component';
 import { qs } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import DeleteModal from '@/components/DeleteModal';
+import DefaultModal from '@/components/DefaultModal';
 export default class KanbanItem extends Component {
   template() {
     return `
@@ -28,13 +29,21 @@ export default class KanbanItem extends Component {
     qs('.deleteModal').classList.remove('hidden');
   }
 
+  setModifyModal() {
+    const modifyModal = new DefaultModal('.kanban-container', { category: 'modifyModal' });
+    modifyModal.setUp(this.$state.id);
+    qs('.modifyModal').classList.remove('hidden');
+  }
+
   setEvent() {
+    console.log(this.$state.id);
     const itemSelector = qs(`.${this.$state.id}`);
     const useRefSelector = qs('.useRef');
     const deleteBtnSelector = qs('.item__delete', itemSelector);
     const modifyBtnSelector = qs('.item__modify', itemSelector);
 
     deleteBtnSelector.addEventListener('click', () => this.setDeleteModal());
+    modifyBtnSelector.addEventListener('click', () => this.setModifyModal());
 
     itemSelector.addEventListener('dragenter', () => {
       if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
