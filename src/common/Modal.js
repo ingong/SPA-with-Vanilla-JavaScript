@@ -6,28 +6,37 @@ import { store, deleteItem } from '@/store/index';
 export default class Modal extends Component {
   template() {
     return `
-      <div class="modal hidden">
-        <div class="modal__overlay"/>
-        <div class="modal__content">
-          <h2>정말로 아이템을 삭제하시겠습니까?</h2>
-          <div class="modal__button-container">
-            <button class="modal__cancel">취소</button>
-            <button class="modal__confirm">확인</button>
+      <div class="modal__container hidden">
+        <div class="modal__overlay">
+          <div class="modal">
+            <div class="modal__content"></div>
+            <div class="modal__button-container">
+                <button class="modal__cancel">취소</button>
+                <button class="modal__confirm">확인</button>
+            </div>
           </div>
         </div>
       </div>
     `;
   }
 
-  setEvent() {
-    const closeModal = () => qs('.modal').classList.add('hidden');
-    const confirmModalBtn = () => {
-      closeModal();
-      store.dispatch(deleteItem({ id: 'ISSUE-104' }));
-    };
+  handleClose(e, exceptList = []) {
+    if (e.target.className === 'modal__content') return;
+    const modalContainerSelector = qs('.modal__container');
+    modalContainerSelector.classList.add('hidden');
+    // 버튼을 클릭하거나, input 을 클릭 하는 경우에 대해서도 예외 처리가 필요함
+  }
 
-    qs('.modal__overlay').addEventListener('click', closeModal);
-    qs('.modal__cancel').addEventListener('click', closeModal);
-    qs('.modal__confirm').addEventListener('click', confirmModalBtn);
+  handleConfirmBtn(e, fn, exceptList = []) {
+    // fn();
+    store.dispatch(deleteItem({ id: 'ISSUE-104' }));
+    console.log(this);
+    this.handleClose(e);
+  }
+
+  setEvent() {
+    qs('.modal__overlay').addEventListener('click', (e) => this.handleClose(e));
+    qs('.modal__cancel').addEventListener('click', (e) => this.handleClose(e));
+    qs('.modal__confirm').addEventListener('click', (e) => this.handleConfirmBtn(e));
   }
 }
