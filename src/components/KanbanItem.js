@@ -26,7 +26,7 @@ export default class KanbanItem extends Component {
     const useRefSelector = qs('.useRef');
 
     itemSelector.addEventListener('dragenter', () => {
-      if (useRefSelector.id === itemSelector.dataset.id) return;
+      if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
       itemSelector.classList.add('drag__enter');
     });
 
