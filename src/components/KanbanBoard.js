@@ -25,7 +25,10 @@ export default class KanbanBoard extends Component {
       (value) =>
         new KanbanColumn('.kanban-container', {
           name: value,
-          list: store.getState()?.filter((v) => v.status === value),
+          list: store
+            .getState()
+            ?.filter((v) => v.status === value)
+            .sort((a, b) => a.order - b.order),
         }),
     );
     new Modal('.kanban-container');

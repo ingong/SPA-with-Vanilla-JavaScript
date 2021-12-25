@@ -4,12 +4,21 @@ const initState = [
     title: 'a',
     inChargePerson: 'insong',
     id: 'ISSUE-104',
+    order: 1,
   },
   {
     status: 'TODO',
     title: 'b',
     inChargePerson: 'insong',
     id: 'ISSUE-105',
+    order: 0,
+  },
+  {
+    status: 'DONE',
+    title: 'c',
+    inChargePerson: 'insong',
+    id: 'ISSUE-106',
+    order: 2,
   },
 ];
 
