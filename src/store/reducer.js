@@ -18,7 +18,7 @@ const initState = [
     title: 'c',
     inChargePerson: 'insong',
     id: 'ISSUE-106',
-    order: 2,
+    order: 0,
   },
 ];
 
@@ -27,7 +27,9 @@ export const reducer = (state = initState, action = {}) => {
     case 'INIT':
       return [...state];
     case 'DELETE_ITEM':
-      return state.filter((value) => value.id !== action.payload);
+      return state.filter((value) => value.id !== action.payload.id);
+    case 'UPDATE_ITEM':
+      return state.filter((value) => value.id !== action.payload.id).concat(action.payload);
     default:
       return state;
   }
