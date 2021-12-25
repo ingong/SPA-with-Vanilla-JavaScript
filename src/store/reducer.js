@@ -1,18 +1,24 @@
-const INIT = 'init';
-const CREATE = 'create';
-const UPDATE = 'update';
-const DELETE = 'delete';
+const initState = [
+  {
+    status: 'TODO',
+    title: 'a',
+    inChargePerson: 'insong',
+    id: 'ISSUE-104',
+  },
+  {
+    status: 'TODO',
+    title: 'b',
+    inChargePerson: 'insong',
+    id: 'ISSUE-105',
+  },
+];
 
-export const reducer = (state = [], { type, payload }) => {
-  switch (type) {
-    case INIT:
-      return [...payload];
-    case CREATE:
-      return [...state].concat(payload);
-    case UPDATE:
-      return [...state.filter((v) => v.id !== payload.id)].concat(payload);
-    case DELETE:
-      return [...state].filter((v) => v.id !== payload.id);
+export const reducer = (state = initState, action = {}) => {
+  switch (action.type) {
+    case 'INIT':
+      return [...state];
+    case 'DELETE_ITEM':
+      return state.filter((value) => value.id !== action.payload);
     default:
       return state;
   }

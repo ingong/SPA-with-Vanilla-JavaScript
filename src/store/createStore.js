@@ -1,25 +1,18 @@
 export const createStore = (reducer) => {
-  let state = [];
-  const listener = [];
+  let state = reducer();
 
-  const publish = () => {
-    listener.forEach(({ subscriber, context }) => {
-      subscriber.call(context);
-    });
-  };
+  const publish = () => listener.forEach(({ subscriber, context }) => subscriber.call(context));
 
   const dispatch = (action) => {
     state = reducer(state, action);
     publish();
   };
 
+  const listener = [];
+
   const subscribe = (subscriber, context = null) => listener.push({ subscriber, context });
 
   const getState = () => [...state];
 
-  return {
-    getState,
-    dispatch,
-    subscribe,
-  };
+  return { getState, dispatch, subscribe };
 };
