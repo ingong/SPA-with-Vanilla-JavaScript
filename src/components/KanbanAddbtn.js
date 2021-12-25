@@ -1,5 +1,6 @@
 import Component from '@/common/Component';
 import { qs } from '@/utils/helper';
+import DefaultModal from '@/components/DefaultModal';
 export default class KanbanAddbtn extends Component {
   template() {
     return `
@@ -8,8 +9,10 @@ export default class KanbanAddbtn extends Component {
   }
 
   setEvent() {
-    qs(`.${this.$state}-addbtn`).addEventListener('click', () =>
-      qs('.modal__container').classList.remove('hidden'),
-    );
+    const addBtnSelector = qs(`.${this.$state}-addbtn`);
+    addBtnSelector.addEventListener('click', () => {
+      new DefaultModal('.kanban-container', { category: 'createModal' });
+      qs('.createModal').classList.remove('hidden');
+    });
   }
 }

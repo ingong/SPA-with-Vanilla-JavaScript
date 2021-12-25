@@ -40,6 +40,39 @@ export default class DefaultModal extends Modal {
     modalContainerSelector.classList.add('hidden');
   }
 
+  handleConfirmBtn(e) {
+    if (Object.keys(this.#state).length === 0) {
+      ['title', 'inChargeId'].map((value) => this.handleWarn(value, true));
+      return;
+    }
+
+    let isPossibeForm = true;
+    Object.entries(this.#state).forEach(([key, value]) => {
+      if (value.length < 1) {
+        this.handleWarn(key, true);
+        isPossibeForm = false;
+      }
+    });
+    if (!isPossibeForm) return;
+
+    store.dispatch(createItem({ id: 'ISSUE', status: 'TODO', ...this.#state }));
+    this.handleClose(e);
+  }
+
+  handleInput(e, category) {
+    this.#state[category] = e.target.value;
+    if (e.target.value.length < 1) this.handleWarn(category, true);
+    else this.handleWarn(category, false);
+  }
+
+  handleWarn(category, isWarning) {
+    if (isWarning)
+      qs(`.input__${category}-warn`).textContent = `${
+        category === 'title' ? '제목' : '담당자 id'
+      }을(를) 입력하세요`;
+    else qs(`.input__${category}-warn`).textContent = '';
+  }
+
   setEvent() {
     qs('.modal__overlay').addEventListener('click', (e) => this.handleClose(e));
     qs('.modal__cancel').addEventListener('click', (e) => this.handleClose(e));
