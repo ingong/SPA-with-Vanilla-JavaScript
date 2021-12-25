@@ -15,7 +15,7 @@ export default class KanbanItem extends Component {
       </div>
       <h5>${this.$state.title}</h5>      
       <div class="item-bottom">
-        <span>${this.$state.inChargePerson}</span>
+        <span>${this.$state.inChargeId}</span>
         <span>수정 일시</span>
       </div> 
     </article>

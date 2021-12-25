@@ -25,7 +25,7 @@ export default class KanbanColumn extends Component {
       (value) =>
         new KanbanItem(kanbanListClassName, {
           title: value.title,
-          inChargePerson: value.inChargePerson,
+          inChargeId: value.inChargeId,
           id: value.id,
           status: value.status,
         }),
