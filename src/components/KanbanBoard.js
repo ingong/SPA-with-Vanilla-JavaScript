@@ -6,15 +6,13 @@ import { store, storeInit, updateItem } from '@/store/index';
 import '@/style/kanban.css';
 
 export default class KanbanBoard extends Component {
-  // TODO $ 와 # 의 차이를 구분해서 사용
-  $draggingItem;
-
   template() {
     return `
       <main>
         <h1>칸반 보드</h1>
         <section class="kanban-container">
         </section>
+        <div class="useRef" />
       </main>
     `;
   }
@@ -27,7 +25,6 @@ export default class KanbanBoard extends Component {
     ['TODO', 'IN_PROGRESS', 'DONE'].map(
       (value) =>
         new KanbanColumn('.kanban-container', {
-          draggingItem: this.$draggingItem,
           name: value,
           list: store
             .getState()
@@ -39,18 +36,21 @@ export default class KanbanBoard extends Component {
     new Modal('.kanban-container');
   }
 
-  // TODO EventListener 제거
   setEvent() {
-    qs('.kanban-container').addEventListener('dragstart', (e) => {
+    const kanbanSelector = qs('.kanban-container');
+    const useRefSelector = qs('.useRef');
+
+    kanbanSelector.addEventListener('dragstart', (e) => {
       const { id, status } = e.target.dataset;
-      this.$draggingItem = { id, status };
+      useRefSelector.dataset.id = id;
+      useRefSelector.dataset.status = status;
     });
 
-    qs('.kanban-container').addEventListener('drop', (e) =>
-      handleDropinColumn(e.target.dataset, this.$draggingItem, store.getState()),
+    kanbanSelector.addEventListener('drop', (e) =>
+      handleDropinColumn(e.target.dataset, store.getState()),
     );
 
-    qs('.kanban-container').addEventListener('dragover', (e) => e.preventDefault());
+    kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
   }
 
   setUp() {
@@ -60,9 +60,11 @@ export default class KanbanBoard extends Component {
   }
 }
 
-const handleDropinColumn = ({ id, status }, draggingItem, itemList) => {
+const handleDropinColumn = ({ id, status }, itemList) => {
   if (id !== 'column') return;
-  const targetItem = itemList.find((v) => v.id === draggingItem.id);
+
+  const useRefSelector = qs('.useRef');
+  const targetItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
   store.dispatch(updateItem({ ...targetItem, status, order: 1 }));
 
   // 칼럼을 기준으로 나눔
