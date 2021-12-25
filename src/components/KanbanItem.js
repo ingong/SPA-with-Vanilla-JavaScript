@@ -5,7 +5,7 @@ export default class KanbanItem extends Component {
     return `
     <article class="kanban-item">
       <div class="item-top">
-        <p>ISSUE-104</p>
+        <p>${this.$state.id}</p>
         <div class="item-top-btn">
           <button>수정</button>
           <button>삭제</button>

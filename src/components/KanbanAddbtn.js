@@ -8,6 +8,8 @@ export default class KanbanAddbtn extends Component {
   }
 
   setEvent() {
-    qs(`.${this.$state}-addbtn`).addEventListener('click', () => console.log('clicked'));
+    qs(`.${this.$state}-addbtn`).addEventListener('click', () =>
+      qs('.modal').classList.remove('hidden'),
+    );
   }
 }
