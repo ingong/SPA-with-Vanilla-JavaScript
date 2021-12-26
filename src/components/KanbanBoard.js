@@ -2,7 +2,7 @@ import Component from '@/common/Component';
 import { qs, getNewDateString } from '@/utils/helper';
 import { getMaxOrder } from '@/utils/board';
 import KanbanColumn from '@/components/KanbanColumn';
-import { store, storeInit, updateItem } from '@/store/index';
+import { store, updateItem } from '@/store';
 import '@/style/kanban.css';
 
 export default class KanbanBoard extends Component {
@@ -54,7 +54,6 @@ export default class KanbanBoard extends Component {
   setUp() {
     store.subscribe(this.cleanUpChildren.bind(this));
     store.subscribe(this.renderChildren.bind(this));
-    storeInit();
   }
 }
 
