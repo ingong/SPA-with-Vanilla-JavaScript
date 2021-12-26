@@ -69,6 +69,7 @@ const handleNewItemDrop = ({ currentTarget }) => {
     order: 0,
     lastModifiedTime: getNewDateString(),
   };
+
   store.dispatch(updateItem(toBeChangeItem));
   localDB.set(toBeChangeItem.id, toBeChangeItem);
 
@@ -90,8 +91,8 @@ const handleExistItemAtTop = (filteredList) => {
     const orderSum = frontTwoItemList.map((item) => item.order).reduce((acc, cur) => acc + cur, 0);
     const orderAvg = orderSum / 2;
 
-    store.dispatch(updateItem({ toBeChangeItem, order: orderAvg }));
-    localDB.set(toBeChangeItem.id, toBeChangeItem);
+    store.dispatch(updateItem({ ...toBeChangeItem, order: orderAvg }));
+    localDB.set(toBeChangeItem.id, { ...toBeChangeItem, order: orderAvg });
     return;
   }
 };
