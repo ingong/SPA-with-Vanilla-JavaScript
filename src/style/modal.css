@@ -91,3 +91,12 @@ label {
   font-size: 18px;
   color: black;
 }
+
+.deleteModal > .modal__overlay > .modal {
+  width: 400px;
+  height: 220px;
+}
+
+h4 {
+  text-align: center;
+}
