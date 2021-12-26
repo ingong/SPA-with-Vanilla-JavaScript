@@ -1,5 +1,6 @@
 import Component from '@/common/Component';
 import { qs, getNewDateString } from '@/utils/helper';
+import { getMaxOrder } from '@/utils/board';
 import KanbanColumn from '@/components/KanbanColumn';
 import { store, storeInit, updateItem } from '@/store/index';
 import '@/style/kanban.css';
@@ -60,17 +61,15 @@ export default class KanbanBoard extends Component {
 const handleDropinColumn = ({ id, status }, itemList) => {
   if (id !== 'column') return;
 
-  const filteredList = itemList.filter((item) => item.status === status);
-  const maxOrder = filteredList.length > 0 ? Math.max(...filteredList.map((item) => item.id)) : -1;
-
   const useRefSelector = qs('.useRef');
   const targetItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
+  const order = getMaxOrder(itemList, status);
 
   store.dispatch(
     updateItem({
       ...targetItem,
       status,
-      order: maxOrder + 1,
+      order,
       lastModifiedTime: getNewDateString(),
     }),
   );
