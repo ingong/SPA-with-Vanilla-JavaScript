@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --progress",
+    "start": "webpack-dev-server --progress",
     "build": "webpack --mode=production",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

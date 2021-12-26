@@ -4,7 +4,7 @@
 
 ```
 1. npm install
-2. npm run dev
+2. npm run start
 
 * 테스트
 npm run test 로 확인하실 수 있습니다.
