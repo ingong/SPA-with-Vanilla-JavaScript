@@ -54,17 +54,9 @@ export default class DefaultModal extends Modal {
       }
     });
     if (!isPossibeForm) return;
-
-    if (this.$state.id !== '')
-      store.dispatch(
-        updateItem({
-          ...this.$state,
-          title: this.$state.title,
-          inChargeId: this.$state.inChargeId,
-          lastModifiedTime: getNewDateString(),
-        }),
-      );
-    else createNewItem(this.$state.title, this.$state.inChargeId);
+    const { title, inChargeId, id, order, status } = this.$state;
+    if (id !== '') updateExistItem(title, inChargeId, order, id, status);
+    else createNewItem(title, inChargeId);
 
     this.handleClose(e);
   }
@@ -124,6 +116,16 @@ const createNewItem = (title, inChargeId) => {
   );
 };
 
-const updateExistItem = () => {
-  console.log('update');
+const updateExistItem = (title, inChargeId, order, id, status) => {
+  const newDateTime = getNewDateString();
+  store.dispatch(
+    updateItem({
+      title,
+      inChargeId,
+      order,
+      id,
+      status,
+      lastModifiedTime: newDateTime,
+    }),
+  );
 };
