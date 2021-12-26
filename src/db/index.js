@@ -23,8 +23,9 @@ const localDB = {
       }
       reject(new Error('Cannot Import Data '));
     }),
-  getLastId: () => localStorage.getItem('lastId'),
+  getLastId: () => +JSON.parse(localStorage.getItem('lastId')),
   set: (key, value) => localStorage.setItem(key, JSON.stringify(value)),
+  delete: (key) => localStorage.removeItem(key),
 };
 
 export default localDB;
