@@ -28,6 +28,7 @@ export default class KanbanColumn extends Component {
           inChargeId: value.inChargeId,
           id: value.id,
           status: value.status,
+          lastModifiedTime: value.lastModifiedTime,
         }),
     );
   }

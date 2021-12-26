@@ -17,7 +17,7 @@ export default class KanbanItem extends Component {
       <h5>${this.$state.title}</h5>      
       <div class="item-bottom">
         <span>${this.$state.inChargeId}</span>
-        <span>수정 일시</span>
+        <span>${this.$state.lastModifiedTime}</span>
       </div> 
     </article>
     `;
@@ -36,7 +36,6 @@ export default class KanbanItem extends Component {
   }
 
   setEvent() {
-    console.log(this.$state.id);
     const itemSelector = qs(`.${this.$state.id}`);
     const useRefSelector = qs('.useRef');
     const deleteBtnSelector = qs('.item__delete', itemSelector);
