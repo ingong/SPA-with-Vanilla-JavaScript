@@ -34,7 +34,7 @@ export default class KanbanItem extends Component {
 
   setModifyModal() {
     const modifyModal = new DefaultModal('.kanban-container', { category: 'modifyModal' });
-    modifyModal.setUp(this.$state.id);
+    modifyModal.setItemContent(this.$state.id);
     qs('.modifyModal').classList.remove('hidden');
   }
 

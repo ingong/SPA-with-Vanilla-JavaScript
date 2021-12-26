@@ -85,7 +85,7 @@ export default class DefaultModal extends Modal {
     qs('.input__inChargeId').addEventListener('keyup', (e) => this.handleInput(e, 'inChargeId'));
   }
 
-  setUp(id) {
+  setItemContent(id) {
     if (id === undefined) return;
     const item = store.getState().find((value) => value.id === id);
     this.$state = item;
