@@ -34,8 +34,11 @@ export default class DefaultModal extends Modal {
 
   handleClose(e) {
     if (
-      ['modal__button-container', 'modal', 'modal__content'].includes(e.target.className) ||
-      ['H4', 'BUTTON', 'INPUT', 'LABEL'].includes(e.target.tagName)
+      isValidClick(
+        ['modal__button-container', 'modal', 'modal__content'],
+        ['H4', 'BUTTON', 'INPUT', 'LABEL'],
+        e.target,
+      )
     )
       return;
 
@@ -106,3 +109,7 @@ export default class DefaultModal extends Modal {
     qs('.input__inChargeId').value = this.$state.inChargeId;
   }
 }
+
+const isValidClick = (classList, tagList, target) => {
+  if (classList.includes(target.className) || tagList.includes(target.tagName)) return true;
+};

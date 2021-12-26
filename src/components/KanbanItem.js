@@ -3,6 +3,7 @@ import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import DeleteModal from '@/components/DeleteModal';
 import DefaultModal from '@/components/DefaultModal';
+
 export default class KanbanItem extends Component {
   template() {
     return `
