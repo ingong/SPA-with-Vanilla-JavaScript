@@ -46,7 +46,7 @@ export default class KanbanBoard extends Component {
     });
 
     kanbanSelector.addEventListener('drop', (e) =>
-      handleDropinColumn(e.target.dataset, store.getState()),
+      this.handleDropinColumn(e.target.dataset, store.getState()),
     );
 
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
@@ -56,16 +56,16 @@ export default class KanbanBoard extends Component {
     store.subscribe(this.cleanUpChildren.bind(this));
     store.subscribe(this.renderChildren.bind(this));
   }
+
+  handleDropinColumn({ id, status }, itemList) {
+    if (id !== 'column') return;
+
+    const useRefSelector = qs('.useRef');
+    const dragItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
+    const order = getMaxOrder(itemList, status) + 1;
+
+    const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
+    store.dispatch(updateItem(toBeChangeItem));
+    localDB.set(toBeChangeItem.id, toBeChangeItem);
+  }
 }
-
-const handleDropinColumn = ({ id, status }, itemList) => {
-  if (id !== 'column') return;
-
-  const useRefSelector = qs('.useRef');
-  const dragItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
-  const order = getMaxOrder(itemList, status) + 1;
-
-  const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
-  store.dispatch(updateItem(toBeChangeItem));
-  localDB.set(toBeChangeItem.id, toBeChangeItem);
-};
