@@ -5,6 +5,7 @@ export const createStore = (reducer) => {
 
   const dispatch = (action) => {
     state = reducer(state, action);
+    console.log(state);
     publish();
   };
 
@@ -12,7 +13,7 @@ export const createStore = (reducer) => {
 
   const subscribe = (subscriber, context = null) => listener.push({ subscriber, context });
 
-  const getState = () => [...state];
+  const getState = () => (state?.length > 0 ? state : []);
 
   return { getState, dispatch, subscribe };
 };
