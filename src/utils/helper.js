@@ -11,6 +11,6 @@ export const qsAll = (selector, scope = document) => {
 export const getNewDateString = () => {
   const dateString = new Date().toLocaleString('en-US', { hour12: false });
   const [date, time] = dateString.split(',');
-  const newFormatDate = [date.split('/').slice(2), date.split('/').slice(0, 2)].flat();
+  const newFormatDate = [date.split('/').slice(2), date.split('/').slice(0, 2)].flat().join('-');
   return newFormatDate + time;
 };
