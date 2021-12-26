@@ -1,7 +1,7 @@
 import Modal from '@/common/Modal';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, createItem, updateItem } from '@/store/index';
-import { getMaxOrder } from '@/utils/board';
+import { getMaxOrder, isValidClick } from '@/utils/board';
 import localDB from '@/db';
 
 export default class DefaultModal extends Modal {
@@ -94,10 +94,6 @@ export default class DefaultModal extends Modal {
     qs('.input__inChargeId').value = this.$state.inChargeId;
   }
 }
-
-const isValidClick = (classList, tagList, target) => {
-  if (classList.includes(target.className) || tagList.includes(target.tagName)) return true;
-};
 
 const createNewItem = (title, inChargeId) => {
   const newDateTime = getNewDateString();
