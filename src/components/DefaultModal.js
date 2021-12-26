@@ -9,6 +9,8 @@ export default class DefaultModal extends Modal {
     id: '',
     title: '',
     inChargeId: '',
+    initialTitle: '',
+    initialInChargeId: '',
   };
 
   modaltemplate() {
@@ -34,7 +36,7 @@ export default class DefaultModal extends Modal {
     modalContentSelector.innerHTML = '';
   }
 
-  handleClose(e) {
+  handleClose(e, isOutSideClick = true) {
     if (
       isValidClick(
         ['modal__button-container', 'modal', 'modal__content'],
@@ -44,6 +46,11 @@ export default class DefaultModal extends Modal {
     )
       return;
 
+    if (isOutSideClick) {
+      const { initialInChargeId, initialTitle } = this.$state;
+      this.$state = { ...this.$state, inChargeId: initialInChargeId, title: initialTitle };
+    }
+
     const modalSelector = qs('.modal__container');
     if (modalSelector !== null) modalSelector.parentNode.lastElementChild.remove();
   }
@@ -51,20 +58,24 @@ export default class DefaultModal extends Modal {
   handleConfirmBtn(e) {
     let isPossibeForm = true;
 
-    Object.entries(this.$state).forEach(([key, value]) => {
-      if (key !== 'id' && value.length < 1) {
-        this.handleWarn(key, true);
-        isPossibeForm = false;
-      }
-    });
+    Array.from(Object.entries(this.$state))
+      .filter((value) => value[0] === 'title' || value[0] === 'inChargeId')
+      .forEach(([key, value]) => {
+        if (value.length < 1) {
+          this.handleWarn(key, true);
+          isPossibeForm = false;
+        }
+      });
+
     if (!isPossibeForm) return;
 
     const { title, inChargeId, id, order, status } = this.$state;
     if (title.length === 0 || inChargeId.length === 0) return;
 
-    if (id !== '') updateExistItem(title, inChargeId, order, id, status);
+    if (id.length > 0) updateExistItem(title, inChargeId, order, id, status);
     else createNewItem(title, inChargeId);
-    this.handleClose(e);
+
+    this.handleClose(e, false);
   }
 
   handleInput(e, category) {
@@ -92,7 +103,7 @@ export default class DefaultModal extends Modal {
   setItemContent(id) {
     if (id === undefined) return;
     const item = store.getState().find((value) => value.id === id);
-    this.$state = item;
+    this.$state = { ...item, initialInChargeId: item.inChargeId, initialTitle: item.title };
 
     qs('.input__title').value = this.$state.title;
     qs('.input__inChargeId').value = this.$state.inChargeId;
