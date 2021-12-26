@@ -26,7 +26,8 @@ export default class DeleteModal extends Modal {
     if (isValidClick(['modal__button-container', 'modal', 'modal__content'], ['H4'], e.target))
       return;
 
-    qs('.modal__container').parentNode.lastElementChild.remove();
+    const modalSelector = qs('.modal__container');
+    if (modalSelector !== null) modalSelector.parentNode.lastElementChild.remove();
   }
 
   handleConfirmBtn(e) {

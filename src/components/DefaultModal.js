@@ -44,11 +44,13 @@ export default class DefaultModal extends Modal {
     )
       return;
 
-    qs('.modal__container').parentNode.lastElementChild.remove();
+    const modalSelector = qs('.modal__container');
+    if (modalSelector !== null) modalSelector.parentNode.lastElementChild.remove();
   }
 
   handleConfirmBtn(e) {
     let isPossibeForm = true;
+
     Object.entries(this.$state).forEach(([key, value]) => {
       if (key !== 'id' && value.length < 1) {
         this.handleWarn(key, true);
@@ -56,10 +58,12 @@ export default class DefaultModal extends Modal {
       }
     });
     if (!isPossibeForm) return;
+
     const { title, inChargeId, id, order, status } = this.$state;
+    if (title.length === 0 || inChargeId.length === 0) return;
+
     if (id !== '') updateExistItem(title, inChargeId, order, id, status);
     else createNewItem(title, inChargeId);
-
     this.handleClose(e);
   }
 

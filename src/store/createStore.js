@@ -5,7 +5,6 @@ export const createStore = (reducer) => {
 
   const dispatch = (action) => {
     state = reducer(state, action);
-    console.log(state);
     publish();
   };
 
