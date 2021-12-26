@@ -1,7 +1,7 @@
 import Component from '@/common/Component';
 import KanbanItem from '@/components/KanbanItem';
 import KanbanAddbtn from '@/components/KanbanAddbtn';
-import { qs } from '@/utils/helper';
+import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 export default class KanbanColumn extends Component {
   template() {
@@ -46,30 +46,46 @@ export default class KanbanColumn extends Component {
 
     divideLineSelector.addEventListener('drop', (e) => {
       divideLineSelector.classList.remove('drag__enter');
-      handleDropItemAtTop(e);
+      handleNewItemDrop(e);
     });
   }
 }
 
-const handleDropItemAtTop = ({ currentTarget }) => {
+const handleNewItemDrop = ({ currentTarget }) => {
   const itemList = store.getState();
   const targetStatus = currentTarget.dataset.status;
   const filteredList = itemList
     .filter((item) => item.status === targetStatus)
     .sort((a, b) => a.order - b.order);
-  const firstItem = filteredList[0] || [];
 
   const useRefSelector = qs('.useRef');
   const dragItem = itemList.find((item) => item.id === useRefSelector.dataset.id);
 
-  store.dispatch(updateItem({ ...dragItem, status: targetStatus, order: 0 }));
+  store.dispatch(
+    updateItem({
+      ...dragItem,
+      status: targetStatus,
+      order: 0,
+      lastModifiedTime: getNewDateString(),
+    }),
+  );
 
-  if (filteredList.length > 1) {
+  if (filteredList.length >= 1) handleExistItemAtTop(filteredList);
+};
+
+const handleExistItemAtTop = (filteredList) => {
+  const existItem = filteredList[0];
+
+  if (filteredList.length === 1) {
+    store.dispatch(updateItem({ ...existItem, order: 1, lastModifiedTime: getNewDateString() }));
+  } else if (filteredList.length > 1) {
     const frontTwoItemList = filteredList.slice(0, 2);
     const orderSum = frontTwoItemList.map((item) => item.order).reduce((acc, cur) => acc + cur, 0);
     const orderAvg = orderSum / 2;
-    store.dispatch(updateItem({ ...firstItem, order: orderAvg }));
-  } else if (filteredList.length === 1) {
-    store.dispatch(updateItem({ ...firstItem, order: 1 }));
+    store.dispatch(
+      updateItem({ ...existItem, order: orderAvg, lastModifiedTime: getNewDateString() }),
+    );
   }
+
+  return;
 };
