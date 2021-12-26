@@ -38,7 +38,7 @@ export default class DefaultModal extends Modal {
     if (
       isValidClick(
         ['modal__button-container', 'modal', 'modal__content'],
-        ['H4', 'BUTTON', 'INPUT', 'LABEL'],
+        ['H4', 'INPUT', 'LABEL'],
         e.target,
       )
     )

@@ -1,6 +1,7 @@
 import Modal from '@/common/Modal';
 import { qs } from '@/utils/helper';
 import { store, deleteItem } from '@/store/index';
+import { isValidClick } from '@/utils/board';
 import localDB from '@/db';
 
 export default class DeleteModal extends Modal {
@@ -22,10 +23,7 @@ export default class DeleteModal extends Modal {
   }
 
   handleClose(e) {
-    if (
-      ['modal__button-container', 'modal', 'modal__content'].includes(e.target.className) ||
-      ['H4', 'BUTTON'].includes(e.target.tagName)
-    )
+    if (isValidClick(['modal__button-container', 'modal', 'modal__content'], ['H4'], e.target))
       return;
 
     qs('.modal__container').parentNode.lastElementChild.remove();
