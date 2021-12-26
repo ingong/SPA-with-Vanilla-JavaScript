@@ -3,6 +3,8 @@ import KanbanItem from '@/components/KanbanItem';
 import KanbanAddbtn from '@/components/KanbanAddbtn';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
+import localDB from '@/db';
+
 export default class KanbanColumn extends Component {
   template() {
     return `
@@ -61,31 +63,35 @@ const handleNewItemDrop = ({ currentTarget }) => {
   const useRefSelector = qs('.useRef');
   const dragItem = itemList.find((item) => item.id === useRefSelector.dataset.id);
 
-  store.dispatch(
-    updateItem({
-      ...dragItem,
-      status: targetStatus,
-      order: 0,
-      lastModifiedTime: getNewDateString(),
-    }),
-  );
+  const toBeChangeItem = {
+    ...dragItem,
+    status: targetStatus,
+    order: 0,
+    lastModifiedTime: getNewDateString(),
+  };
+  store.dispatch(updateItem(toBeChangeItem));
+  localDB.set(toBeChangeItem.id, toBeChangeItem);
 
   if (filteredList.length >= 1) handleExistItemAtTop(filteredList);
 };
 
 const handleExistItemAtTop = (filteredList) => {
   const existItem = filteredList[0];
+  let toBeChangeItem = { ...existItem, lastModifiedTime: getNewDateString() };
 
   if (filteredList.length === 1) {
-    store.dispatch(updateItem({ ...existItem, order: 1, lastModifiedTime: getNewDateString() }));
-  } else if (filteredList.length > 1) {
+    store.dispatch(updateItem({ ...toBeChangeItem, order: 1 }));
+    localDB.set(toBeChangeItem.id, toBeChangeItem);
+    return;
+  }
+
+  if (filteredList.length > 1) {
     const frontTwoItemList = filteredList.slice(0, 2);
     const orderSum = frontTwoItemList.map((item) => item.order).reduce((acc, cur) => acc + cur, 0);
     const orderAvg = orderSum / 2;
-    store.dispatch(
-      updateItem({ ...existItem, order: orderAvg, lastModifiedTime: getNewDateString() }),
-    );
-  }
 
-  return;
+    store.dispatch(updateItem({ toBeChangeItem, order: orderAvg }));
+    localDB.set(toBeChangeItem.id, toBeChangeItem);
+    return;
+  }
 };

@@ -1,6 +1,7 @@
 import Modal from '@/common/Modal';
 import { qs } from '@/utils/helper';
 import { store, deleteItem } from '@/store/index';
+import localDB from '@/db';
 
 export default class DeleteModal extends Modal {
   $state;
@@ -31,7 +32,9 @@ export default class DeleteModal extends Modal {
   }
 
   handleConfirmBtn(e) {
-    store.dispatch(deleteItem({ id: this.$state }));
+    const id = this.$state;
+    store.dispatch(deleteItem({ id }));
+    localDB.delete(id);
     this.handleClose(e);
   }
 

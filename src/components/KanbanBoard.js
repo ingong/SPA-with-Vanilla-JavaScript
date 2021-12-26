@@ -3,6 +3,7 @@ import { qs, getNewDateString } from '@/utils/helper';
 import { getMaxOrder } from '@/utils/board';
 import KanbanColumn from '@/components/KanbanColumn';
 import { store, updateItem } from '@/store';
+import localDB from '@/db';
 import '@/style/kanban.css';
 
 export default class KanbanBoard extends Component {
@@ -61,15 +62,10 @@ const handleDropinColumn = ({ id, status }, itemList) => {
   if (id !== 'column') return;
 
   const useRefSelector = qs('.useRef');
-  const targetItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
+  const dragItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
   const order = getMaxOrder(itemList, status) + 1;
 
-  store.dispatch(
-    updateItem({
-      ...targetItem,
-      status,
-      order,
-      lastModifiedTime: getNewDateString(),
-    }),
-  );
+  const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
+  store.dispatch(updateItem(toBeChangeItem));
+  localDB.set(toBeChangeItem.id, toBeChangeItem);
 };

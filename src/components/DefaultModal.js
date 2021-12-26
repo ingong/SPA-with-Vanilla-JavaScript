@@ -2,6 +2,8 @@ import Modal from '@/common/Modal';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, createItem, updateItem } from '@/store/index';
 import { getMaxOrder } from '@/utils/board';
+import localDB from '@/db';
+
 export default class DefaultModal extends Modal {
   $state = {
     id: '',
@@ -101,31 +103,24 @@ const createNewItem = (title, inChargeId) => {
   const newDateTime = getNewDateString();
   const itemList = store.getState();
   const order = getMaxOrder(itemList, 'TODO') + 1;
-  // getNewId
-  // setNewId
+  const lastId = localDB.getLastId();
+  const item = {
+    status: 'TODO',
+    id: `ISSUE-${lastId + 1}`,
+    order,
+    title,
+    inChargeId,
+    lastModifiedTime: newDateTime,
+  };
 
-  store.dispatch(
-    createItem({
-      status: 'TODO',
-      id: 'ISSUE-112',
-      order,
-      title,
-      inChargeId,
-      lastModifiedTime: newDateTime,
-    }),
-  );
+  store.dispatch(createItem(item));
+  localDB.set(item.id, item);
+  localDB.set('lastId', lastId + 1);
 };
 
 const updateExistItem = (title, inChargeId, order, id, status) => {
   const newDateTime = getNewDateString();
-  store.dispatch(
-    updateItem({
-      title,
-      inChargeId,
-      order,
-      id,
-      status,
-      lastModifiedTime: newDateTime,
-    }),
-  );
+  const item = { title, inChargeId, order, id, status, lastModifiedTime: newDateTime };
+  store.dispatch(updateItem(item));
+  localDB.set(item.id, item);
 };
