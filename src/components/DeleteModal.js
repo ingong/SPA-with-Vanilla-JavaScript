@@ -27,8 +27,7 @@ export default class DeleteModal extends Modal {
     )
       return;
 
-    const modalContainerSelector = qs('.modal__container');
-    modalContainerSelector.classList.add('hidden');
+    qs('.modal__container').parentNode.lastElementChild.remove();
   }
 
   handleConfirmBtn(e) {

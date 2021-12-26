@@ -39,15 +39,13 @@ export default class DefaultModal extends Modal {
     )
       return;
 
-    const modalContainerSelector = qs('.modal__container');
-    modalContainerSelector.classList.add('hidden');
+    qs('.modal__container').parentNode.lastElementChild.remove();
   }
 
   handleConfirmBtn(e) {
     let isPossibeForm = true;
     Object.entries(this.$state).forEach(([key, value]) => {
       if (key !== 'id' && value.length < 1) {
-        console.log(key, value);
         this.handleWarn(key, true);
         isPossibeForm = false;
       }
@@ -57,6 +55,7 @@ export default class DefaultModal extends Modal {
     if (this.$state.id !== '') store.dispatch(updateItem({ ...this.$state }));
     else store.dispatch(createItem({ ...this.$state, status: 'TODO', id: 'ISSUE-112' }));
 
+    this.removeEvent();
     this.handleClose(e);
   }
 
@@ -80,6 +79,14 @@ export default class DefaultModal extends Modal {
     qs('.modal__confirm').addEventListener('click', (e) => this.handleConfirmBtn(e));
     qs('.input__title').addEventListener('keyup', (e) => this.handleInput(e, 'title'));
     qs('.input__inChargeId').addEventListener('keyup', (e) => this.handleInput(e, 'inChargeId'));
+  }
+
+  removeEvent() {
+    qs('.modal__overlay').removeEventListener('click', (e) => this.handleClose(e));
+    qs('.modal__cancel').removeEventListener('click', (e) => this.handleClose(e));
+    qs('.modal__confirm').remooveEventListener('click', (e) => this.handleConfirmBtn(e));
+    qs('.input__title').removeEventListener('keyup', (e) => this.handleInput(e, 'title'));
+    qs('.input__inChargeId').removeEventListener('keyup', (e) => this.handleInput(e, 'inChargeId'));
   }
 
   setUp(id) {
