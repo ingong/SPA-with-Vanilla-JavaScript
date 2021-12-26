@@ -1,5 +1,5 @@
 import Component from '@/common/Component';
-import { qs } from '@/utils/helper';
+import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import DeleteModal from '@/components/DeleteModal';
 import DefaultModal from '@/components/DefaultModal';
@@ -91,5 +91,7 @@ const handleDropItem = ({ currentTarget }) => {
   const useRefSelector = qs('.useRef');
   const dragItem = itemList.find((item) => item.id === useRefSelector.dataset.id);
 
-  store.dispatch(updateItem({ ...dragItem, status: targetStatus, order }));
+  store.dispatch(
+    updateItem({ ...dragItem, status: targetStatus, order, lastModifiedTime: getNewDateString() }),
+  );
 };

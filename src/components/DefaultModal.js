@@ -1,5 +1,5 @@
 import Modal from '@/common/Modal';
-import { qs } from '@/utils/helper';
+import { qs, getNewDateString } from '@/utils/helper';
 import { store, createItem, updateItem } from '@/store/index';
 
 export default class DefaultModal extends Modal {
@@ -52,10 +52,26 @@ export default class DefaultModal extends Modal {
     });
     if (!isPossibeForm) return;
 
-    if (this.$state.id !== '') store.dispatch(updateItem({ ...this.$state }));
-    else store.dispatch(createItem({ ...this.$state, status: 'TODO', id: 'ISSUE-112' }));
+    if (this.$state.id !== '')
+      store.dispatch(
+        updateItem({
+          ...this.$state,
+          title: this.$state.title,
+          inChargeId: this.$state.inChargeId,
+          lastModifiedTime: getNewDateString(),
+        }),
+      );
+    else
+      store.dispatch(
+        createItem({
+          status: 'TODO',
+          id: 'ISSUE-112',
+          title: this.$state.title,
+          inChargeId: this.$state.inChargeId,
+          lastModifiedTime: getNewDateString(),
+        }),
+      );
 
-    this.removeEvent();
     this.handleClose(e);
   }
 
@@ -79,14 +95,6 @@ export default class DefaultModal extends Modal {
     qs('.modal__confirm').addEventListener('click', (e) => this.handleConfirmBtn(e));
     qs('.input__title').addEventListener('keyup', (e) => this.handleInput(e, 'title'));
     qs('.input__inChargeId').addEventListener('keyup', (e) => this.handleInput(e, 'inChargeId'));
-  }
-
-  removeEvent() {
-    qs('.modal__overlay').removeEventListener('click', (e) => this.handleClose(e));
-    qs('.modal__cancel').removeEventListener('click', (e) => this.handleClose(e));
-    qs('.modal__confirm').remooveEventListener('click', (e) => this.handleConfirmBtn(e));
-    qs('.input__title').removeEventListener('keyup', (e) => this.handleInput(e, 'title'));
-    qs('.input__inChargeId').removeEventListener('keyup', (e) => this.handleInput(e, 'inChargeId'));
   }
 
   setUp(id) {

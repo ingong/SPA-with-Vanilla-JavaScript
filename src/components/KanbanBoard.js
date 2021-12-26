@@ -1,5 +1,5 @@
 import Component from '@/common/Component';
-import { qs } from '@/utils/helper';
+import { qs, getNewDateString } from '@/utils/helper';
 import KanbanColumn from '@/components/KanbanColumn';
 import { store, storeInit, updateItem } from '@/store/index';
 import '@/style/kanban.css';
@@ -66,5 +66,12 @@ const handleDropinColumn = ({ id, status }, itemList) => {
   const useRefSelector = qs('.useRef');
   const targetItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
 
-  store.dispatch(updateItem({ ...targetItem, status, order: maxOrder + 1 }));
+  store.dispatch(
+    updateItem({
+      ...targetItem,
+      status,
+      order: maxOrder + 1,
+      lastModifiedTime: getNewDateString(),
+    }),
+  );
 };
