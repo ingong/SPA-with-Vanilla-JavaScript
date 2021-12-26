@@ -63,7 +63,7 @@ const handleDropinColumn = ({ id, status }, itemList) => {
 
   const useRefSelector = qs('.useRef');
   const targetItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
-  const order = getMaxOrder(itemList, status);
+  const order = getMaxOrder(itemList, status) + 1;
 
   store.dispatch(
     updateItem({

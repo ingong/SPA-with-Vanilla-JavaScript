@@ -1,7 +1,7 @@
 import Modal from '@/common/Modal';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, createItem, updateItem } from '@/store/index';
-
+import { getMaxOrder } from '@/utils/board';
 export default class DefaultModal extends Modal {
   $state = {
     id: '',
@@ -64,16 +64,7 @@ export default class DefaultModal extends Modal {
           lastModifiedTime: getNewDateString(),
         }),
       );
-    else
-      store.dispatch(
-        createItem({
-          status: 'TODO',
-          id: 'ISSUE-112',
-          title: this.$state.title,
-          inChargeId: this.$state.inChargeId,
-          lastModifiedTime: getNewDateString(),
-        }),
-      );
+    else createNewItem(this.$state.title, this.$state.inChargeId);
 
     this.handleClose(e);
   }
@@ -112,4 +103,27 @@ export default class DefaultModal extends Modal {
 
 const isValidClick = (classList, tagList, target) => {
   if (classList.includes(target.className) || tagList.includes(target.tagName)) return true;
+};
+
+const createNewItem = (title, inChargeId) => {
+  const newDateTime = getNewDateString();
+  const itemList = store.getState();
+  const order = getMaxOrder(itemList, 'TODO') + 1;
+  // getNewId
+  // setNewId
+
+  store.dispatch(
+    createItem({
+      status: 'TODO',
+      id: 'ISSUE-112',
+      order,
+      title,
+      inChargeId,
+      lastModifiedTime: newDateTime,
+    }),
+  );
+};
+
+const updateExistItem = () => {
+  console.log('update');
 };
