@@ -7,6 +7,11 @@ import DefaultModal from '@/components/DefaultModal';
 import localDB from '@/db';
 
 export default class KanbanItem extends Component {
+  render() {
+    setTimeout(() => this.setEvent(), 0);
+    return this.template();
+  }
+
   template() {
     return `
     <article class="kanban-item ${this.$state.id}" data-id=${this.$state.id} data-status=${this.$state.status} draggable=true>
@@ -59,30 +64,30 @@ export default class KanbanItem extends Component {
 
   setEvent() {
     const itemSelector = qs(`.${this.$state.id}`);
+    if (!itemSelector) return;
+
     const useRefSelector = qs('.useRef');
     const deleteBtnSelector = qs('.item__delete', itemSelector);
     const modifyBtnSelector = qs('.item__modify', itemSelector);
 
     deleteBtnSelector.addEventListener('click', () => this.setDeleteModal());
     modifyBtnSelector.addEventListener('click', () => this.setModifyModal());
-
     itemSelector.addEventListener('dragenter', () => {
       if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
       itemSelector.classList.add('drag__enter');
     });
-
+    let timer;
     itemSelector.addEventListener('dragleave', (e) => {
       if (useRefSelector.id === itemSelector.dataset.id) return;
-      if (Array.from(e.target.classList).includes('drag__enter')) {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
         itemSelector.classList.remove('drag__enter');
-      }
+      }, 100);
     });
-
     itemSelector.addEventListener('drop', (e) => {
       itemSelector.classList.remove('drag__enter');
       this.handleDropItem(e);
     });
-
     itemSelector.addEventListener('dragover', (e) => e.preventDefault());
   }
 }

@@ -22,17 +22,20 @@ export default class KanbanColumn extends Component {
     const kanbanColTitleClassName = `.${this.$state.name}-title`;
     const kanbanListClassName = `.${this.$state.name}-list`;
 
-    new KanbanAddbtn(kanbanColTitleClassName, this.$state.name);
-    this.$state.list?.map(
-      (value) =>
-        new KanbanItem(kanbanListClassName, {
+    const childrenTemplate = this.$state.list
+      .map((value) =>
+        new KanbanItem('_', {
           title: value.title,
           inChargeId: value.inChargeId,
           id: value.id,
           status: value.status,
           lastModifiedTime: value.lastModifiedTime,
-        }),
-    );
+        }).render(),
+      )
+      .join('');
+    qs(kanbanListClassName).insertAdjacentHTML('beforeend', childrenTemplate);
+
+    new KanbanAddbtn(kanbanColTitleClassName, this.$state.name);
   }
 
   setEvent() {

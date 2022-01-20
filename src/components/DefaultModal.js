@@ -71,7 +71,6 @@ export default class DefaultModal extends Modal {
 
     const { title, inChargeId, id, order, status } = this.$state;
     if (title.length === 0 || inChargeId.length === 0) return;
-
     if (id.length > 0) updateExistItem(title, inChargeId, order, id, status);
     else createNewItem(title, inChargeId);
 
@@ -79,6 +78,8 @@ export default class DefaultModal extends Modal {
   }
 
   handleInput(e, category) {
+    debounce(e.target);
+    throttling(e.target);
     this.$state[category] = e.target.value;
     if (e.target.value.length < 1) this.handleWarn(category, true);
     else this.handleWarn(category, false);
@@ -134,4 +135,23 @@ const updateExistItem = (title, inChargeId, order, id, status) => {
   const item = { title, inChargeId, order, id, status, lastModifiedTime: newDateTime };
   store.dispatch(updateItem(item));
   localDB.set(item.id, item);
+};
+
+// 특정 함수의 마지막만 호출됨.
+let debounceTimer;
+const debounce = (target) => {
+  if (debounceTimer) clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    console.log(target.value, 'debouncing');
+  }, 5000);
+};
+
+let timer;
+const throttling = (target) => {
+  if (!timer) {
+    timer = setTimeout(() => {
+      timer = null;
+      console.log(target.value, 'throttling');
+    }, 5000);
+  }
 };
