@@ -34,38 +34,30 @@ export default class KanbanColumn extends Component {
       )
       .join('');
     qs(kanbanListClassName).insertAdjacentHTML('beforeend', childrenTemplate);
-
     new KanbanAddbtn(kanbanColTitleClassName, this.$state.name);
   }
 
   setEvent() {
     const divideLineSelector = qs(`.${this.$state.name}-line`);
-
     divideLineSelector.addEventListener('dragenter', () => {
       divideLineSelector.classList.add('drag__enter');
     });
-
-    divideLineSelector.addEventListener('dragleave', (e) => {
+    divideLineSelector.addEventListener('dragleave', () => {
       divideLineSelector.classList.remove('drag__enter');
     });
-
     divideLineSelector.addEventListener('drop', (e) => {
       divideLineSelector.classList.remove('drag__enter');
-      handleNewItemDrop(e);
+      handleDroppedItem(e);
     });
   }
 }
 
-const handleNewItemDrop = ({ currentTarget }) => {
+const handleDroppedItem = ({ currentTarget }) => {
   const itemList = store.getState();
   const targetStatus = currentTarget.dataset.status;
-  const filteredList = itemList
-    .filter((item) => item.status === targetStatus)
-    .sort((a, b) => a.order - b.order);
-
+  const filteredList = itemList.filter((item) => item.status === targetStatus).sort((a, b) => a.order - b.order);
   const useRefSelector = qs('.useRef');
   const dragItem = itemList.find((item) => item.id === useRefSelector.dataset.id);
-
   const toBeChangeItem = {
     ...dragItem,
     status: targetStatus,
@@ -75,27 +67,28 @@ const handleNewItemDrop = ({ currentTarget }) => {
 
   store.dispatch(updateItem(toBeChangeItem));
   localDB.set(toBeChangeItem.id, toBeChangeItem);
-
-  if (filteredList.length >= 1) handleExistItemAtTop(filteredList);
+  const shouldChange = filteredList.length >= 1;
+  if (shouldChange) handleTopPosItem(filteredList);
 };
 
-const handleExistItemAtTop = (filteredList) => {
-  const existItem = filteredList[0];
-  let toBeChangeItem = { ...existItem, lastModifiedTime: getNewDateString() };
+const handleTopPosItem = (filteredList) => {
+  const TOP = 0;
+  const toBeChangeItem = { ...filteredList[TOP], lastModifiedTime: getNewDateString() };
+  const shouldChange = filteredList.length === 1 ? false : true;
+  const shouldChangeTwoItemList = filteredList.slice(0, 2);
+  const sumOfOrder = shouldChangeTwoItemList.reduce((acc, cur) => acc + cur.item, 0);
+  const orderAvg = sumOfOrder / 2;
 
-  if (filteredList.length === 1) {
-    store.dispatch(updateItem({ ...toBeChangeItem, order: 1 }));
-    localDB.set(toBeChangeItem.id, toBeChangeItem);
-    return;
-  }
-
-  if (filteredList.length > 1) {
-    const frontTwoItemList = filteredList.slice(0, 2);
-    const orderSum = frontTwoItemList.map((item) => item.order).reduce((acc, cur) => acc + cur, 0);
-    const orderAvg = orderSum / 2;
-
-    store.dispatch(updateItem({ ...toBeChangeItem, order: orderAvg }));
-    localDB.set(toBeChangeItem.id, { ...toBeChangeItem, order: orderAvg });
-    return;
+  switch (shouldChange) {
+    case true:
+      store.dispatch(updateItem({ ...toBeChangeItem, order: 1 }));
+      localDB.set(toBeChangeItem.id, toBeChangeItem);
+      break;
+    case false:
+      store.dispatch(updateItem({ ...toBeChangeItem, order: orderAvg }));
+      localDB.set(toBeChangeItem.id, { ...toBeChangeItem, order: orderAvg });
+      break;
+    default:
+      return;
   }
 };
