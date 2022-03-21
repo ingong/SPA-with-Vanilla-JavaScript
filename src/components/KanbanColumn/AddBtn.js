@@ -1,7 +1,8 @@
 import Component from '@/common/Component';
 import { qs } from '@/utils/helper';
 import DefaultModal from '@/components/DefaultModal';
-export default class KanbanAddbtn extends Component {
+
+export default class Addbtn extends Component {
   template() {
     return `
       <button class='addBtn ${this.$state}-addbtn'>항목 추가</button>

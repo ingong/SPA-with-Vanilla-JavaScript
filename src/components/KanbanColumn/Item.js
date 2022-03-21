@@ -6,7 +6,7 @@ import DeleteModal from '@/components/DeleteModal';
 import DefaultModal from '@/components/DefaultModal';
 import localDB from '@/db';
 
-export default class KanbanItem extends Component {
+export default class Item extends Component {
   render() {
     setTimeout(() => this.setEvent(), 0);
     return this.template();

@@ -38,17 +38,12 @@ export default class KanbanBoard extends Component {
   setEvent() {
     const kanbanSelector = qs('.kanban-container');
     const useRefSelector = qs('.useRef');
-
     kanbanSelector.addEventListener('dragstart', (e) => {
       const { id, status } = e.target.dataset;
       useRefSelector.dataset.id = id;
       useRefSelector.dataset.status = status;
     });
-
-    kanbanSelector.addEventListener('drop', (e) =>
-      this.handleDropinColumn(e.target.dataset, store.getState()),
-    );
-
+    kanbanSelector.addEventListener('drop', (e) => this.handleDropinColumn(e.target.dataset, store.getState()));
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
   }
 

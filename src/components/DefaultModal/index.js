@@ -37,13 +37,7 @@ export default class DefaultModal extends Modal {
   }
 
   handleClose(e, isOutSideClick = true) {
-    if (
-      isValidClick(
-        ['modal__button-container', 'modal', 'modal__content'],
-        ['H4', 'INPUT', 'LABEL'],
-        e.target,
-      )
-    )
+    if (isValidClick(['modal__button-container', 'modal', 'modal__content'], ['H4', 'INPUT', 'LABEL'], e.target))
       return;
 
     if (isOutSideClick) {
@@ -78,8 +72,6 @@ export default class DefaultModal extends Modal {
   }
 
   handleInput(e, category) {
-    debounce(e.target);
-    throttling(e.target);
     this.$state[category] = e.target.value;
     if (e.target.value.length < 1) this.handleWarn(category, true);
     else this.handleWarn(category, false);
@@ -87,9 +79,7 @@ export default class DefaultModal extends Modal {
 
   handleWarn(category, isWarning) {
     if (isWarning) {
-      qs(`.input__${category}-warn`).textContent = `${
-        category === 'title' ? '제목' : '담당자 id'
-      }을(를) 입력하세요`;
+      qs(`.input__${category}-warn`).textContent = `${category === 'title' ? '제목' : '담당자 id'}을(를) 입력하세요`;
     } else qs(`.input__${category}-warn`).textContent = '';
   }
 
@@ -135,23 +125,4 @@ const updateExistItem = (title, inChargeId, order, id, status) => {
   const item = { title, inChargeId, order, id, status, lastModifiedTime: newDateTime };
   store.dispatch(updateItem(item));
   localDB.set(item.id, item);
-};
-
-// 특정 함수의 마지막만 호출됨.
-let debounceTimer;
-const debounce = (target) => {
-  if (debounceTimer) clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    console.log(target.value, 'debouncing');
-  }, 5000);
-};
-
-let timer;
-const throttling = (target) => {
-  if (!timer) {
-    timer = setTimeout(() => {
-      timer = null;
-      console.log(target.value, 'throttling');
-    }, 5000);
-  }
 };

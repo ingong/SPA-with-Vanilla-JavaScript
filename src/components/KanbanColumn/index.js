@@ -1,6 +1,6 @@
 import Component from '@/common/Component';
-import KanbanItem from '@/components/KanbanItem';
-import KanbanAddbtn from '@/components/KanbanAddbtn';
+import KanbanItem from '@/components/KanbanColumn/Item';
+import KanbanAddbtn from '@/components/KanbanColumn/AddBtn';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import localDB from '@/db';
