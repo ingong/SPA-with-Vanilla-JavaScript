@@ -2,8 +2,8 @@ import Component from '@/common/Component';
 import { qs, getNewDateString } from '@/utils/helper';
 import { getNewOrder } from '@/utils/board';
 import { store, updateItem } from '@/store/index';
-import DeleteModal from '@/components/DeleteModal';
-import DefaultModal from '@/components/DefaultModal';
+import RemoveModal from '@/components/KanbanModal/RemoveModal';
+import EditModal from '@/components/KanbanModal/EditModal';
 import localDB from '@/db';
 
 export default class Item extends Component {
@@ -32,13 +32,13 @@ export default class Item extends Component {
   }
 
   setDeleteModal() {
-    const deleteModal = new DeleteModal('.kanban-container', { category: 'deleteModal' });
+    const deleteModal = new RemoveModal('.kanban-container', { category: 'deleteModal' });
     deleteModal.renderChildren(this.$state.id);
     qs('.deleteModal').classList.remove('hidden');
   }
 
   setModifyModal() {
-    const modifyModal = new DefaultModal('.kanban-container', { category: 'modifyModal' });
+    const modifyModal = new EditModal('.kanban-container', { category: 'modifyModal' });
     modifyModal.setItemContent(this.$state.id);
     qs('.modifyModal').classList.remove('hidden');
   }

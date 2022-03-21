@@ -1,6 +1,6 @@
 import Component from '@/common/Component';
-import KanbanItem from '@/components/KanbanColumn/Item';
-import KanbanAddbtn from '@/components/KanbanColumn/AddBtn';
+import Item from '@/components/KanbanColumn/Item';
+import Addbtn from '@/components/KanbanColumn/AddBtn';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import localDB from '@/db';
@@ -24,7 +24,7 @@ export default class KanbanColumn extends Component {
 
     const childrenTemplate = this.$state.list
       .map((value) =>
-        new KanbanItem('_', {
+        new Item('_', {
           title: value.title,
           inChargeId: value.inChargeId,
           id: value.id,
@@ -34,7 +34,7 @@ export default class KanbanColumn extends Component {
       )
       .join('');
     qs(kanbanListClassName).insertAdjacentHTML('beforeend', childrenTemplate);
-    new KanbanAddbtn(kanbanColTitleClassName, this.$state.name);
+    new Addbtn(kanbanColTitleClassName, this.$state.name);
   }
 
   setEvent() {
