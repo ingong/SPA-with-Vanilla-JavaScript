@@ -17,17 +17,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: mode === 'development' ? '[path]__[local]' : '[hash:base64]',
-              },
-            },
-          },
-        ],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
