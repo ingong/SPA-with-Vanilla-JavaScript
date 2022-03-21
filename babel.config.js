@@ -3,11 +3,10 @@ module.exports = {
     [
       '@babel/env',
       {
-        targets: {
-          browsers: ['>= 5% in KR'],
-        },
+        targets: '> 0.25%, not dead',
+        useBuiltIns: 'usage',
+        corejs: 3,
       },
     ],
   ],
-  plugins: ['@babel/proposal-class-properties'],
 };
