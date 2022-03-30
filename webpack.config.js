@@ -9,6 +9,11 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
   },
+  devServer: {
+    open: true,
+    hot: true,
+    historyApiFallback: true,
+  },
   devtool: mode === 'development' ? 'eval-source-map' : false,
   module: {
     rules: [
@@ -25,10 +30,18 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: '/public/index.html',
+      template: './public/index.html',
+      minify:
+        process.env.NODE_ENV === 'production'
+          ? {
+              collapseWhitespace: true,
+              removeComments: true,
+            }
+          : false,
+      hash: mode === 'production'
     }),
   ],
-  optimizations: {
+  optimization: {
     minimizer:
       mode === 'production'
         ? [
