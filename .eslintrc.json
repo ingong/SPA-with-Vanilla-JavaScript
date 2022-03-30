@@ -1,0 +1,51 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "allowImportExportEverywhere": true,
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": "warn"
+  },
+  "overrides": [
+    {
+      "files": "**/*.+(ts).",
+      "plugins": ["@typescript-eslint"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:prettier/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tsconfig.eslint.json",
+        "allowImportExportEverywhere": true,
+        "ecmaVersion": 13,
+        "sourceType": "module"
+      },
+      "settings": {
+        "import/extensions": [".ts"],
+        "import/parsers": {
+          "@typescript-eslint/parser": [".ts"]
+        }
+      },
+      "rules": {
+        "prettier/prettier": "error",
+        "no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off"
+      }
+    }
+  ],
+  "ignorePatterns": ["build/", "webpack.config.js"]
+}
