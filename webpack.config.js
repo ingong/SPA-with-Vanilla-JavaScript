@@ -14,6 +14,9 @@ module.exports = {
     hot: true,
     historyApiFallback: true,
   },
+  resolve: {
+    extensions: ['.js', '.ts'],
+  },
   devtool: mode === 'development' ? 'eval-source-map' : false,
   module: {
     rules: [
@@ -24,7 +27,7 @@ module.exports = {
       },
       {
         test: /\.(sa|sc|c)ss$/,
-        use: [mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
+        use: [mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },
@@ -60,5 +63,6 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
       '@public': path.resolve(__dirname, 'public'),
     },
+    extensions: ['.js', '.ts'],
   },
 };
