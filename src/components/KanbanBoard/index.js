@@ -19,7 +19,7 @@ export default class KanbanBoard extends Component {
   }
 
   cleanUpChildren() {
-    qs('.kanban-container').innerHTML = '';
+    if (qs('.kanban-container')) qs('.kanban-container').innerHTML = '';
   }
 
   renderChildren() {

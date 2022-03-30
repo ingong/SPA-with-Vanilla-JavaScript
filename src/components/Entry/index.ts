@@ -1,8 +1,9 @@
 import { qs } from '@/utils/helper';
 import '@/components/Entry/index.scss';
+import { movePage } from '@/routes';
 
 interface EntryPropType {
-  pathname: string[];
+  children: Array<{ name: string; route: string }>;
 }
 
 export default class Entry {
@@ -11,8 +12,9 @@ export default class Entry {
 
   constructor($target: string, props: EntryPropType) {
     this.$target = $target;
-    this.props = props.pathname || [];
+    this.props = props.children || [];
     this.render();
+    this.setEvent();
   }
 
   template() {
@@ -20,9 +22,9 @@ export default class Entry {
     <div class="entry__container">
       <h2>SPA</h2>
       ${this.props?.map(
-        (pathName) => `
-        <article class="entry__item">
-          <p>${pathName}</p>
+        (path) => `
+        <article class="entry__item" data-route=${path.route}>
+          <p>${path.name}</p>
         </article>
       `,
       )}
@@ -35,10 +37,13 @@ export default class Entry {
   }
 
   setEvent() {
-    document.addEventListener('click', (e) => {
-      console.log(e);
-    });
+    qs('.entry__container').addEventListener('click', (e: MouseEvent) => handleClick(e));
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const closestTarget = target.closest('article');
+      if (!closestTarget) return;
+      const { route } = closestTarget.dataset;
+      movePage(route);
+    };
   }
-
-  removeEventListener() {}
 }
