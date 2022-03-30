@@ -1,4 +1,4 @@
-import '@/style/index.css';
+import '@/style/global.css';
 import { router } from './routes';
 
 const App = {
