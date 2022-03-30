@@ -4,7 +4,7 @@ import { getMaxOrder } from '@/utils/board';
 import KanbanColumn from '@/components/KanbanColumn';
 import { store, updateItem } from '@/store';
 import localDB from '@/db';
-import '@/style/kanban.css';
+import '@/components/KanbanBoard/kanban.css';
 
 export default class KanbanBoard extends Component {
   template() {
