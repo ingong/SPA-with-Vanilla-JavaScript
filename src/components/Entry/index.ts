@@ -38,11 +38,13 @@ export default class Entry {
 
   setEvent() {
     qs('.entry__container').addEventListener('click', (e: MouseEvent) => handleClick(e));
+
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const closestTarget = target.closest('article');
       if (!closestTarget) return;
       const { route } = closestTarget.dataset;
+      qs('.entry__container').removeEventListener('click', (e: MouseEvent) => handleClick(e));
       movePage(route);
     };
   }
