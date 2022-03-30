@@ -4,9 +4,13 @@
 
 ### 기술스택
 
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![Webpack](https://img.shields.io/badge/webpack-%238DD6F9.svg?style=for-the-badge&logo=webpack&logoColor=black)
-![Babel](https://img.shields.io/badge/Babel-F9DC3e?style=for-the-badge&logo=babel&logoColor=black)
+[![TypeScript Badge](https://img.shields.io/badge/Typescript-235A97?style=flat-square&logo=Typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![JavaScript Badge](https://img.shields.io/badge/JavaScript-FFFFFF?style=flat-square&logo=JavaScript&logoColor=yellow)]()
+[![Yarn Badge](https://img.shields.io/badge/Yarn-FFFFFF?style=flat-square&logo=Yarn&logoColor=black)]()
+[![Webpack Badge](https://img.shields.io/badge/Webpack-8DD6F9?style=flat-square&logo=Webpack&logoColor=black)]()
+[![Babel Badge](https://img.shields.io/badge/Babel-F9DC3E?style=flat-square&logo=Babel&logoColor=yellow)]()
+[![eslint Badge](https://img.shields.io/badge/eslint-4B32C3?style=flat-square&logo=eslint&logoColor=white)]()
+[![prettier Badge](https://img.shields.io/badge/prettier-F7B93E?style=flat-square&logo=prettier&logoColor=white)]()
 
 <br/>
 
@@ -22,7 +26,16 @@
 
 ## 기능
 
-### 1. 칸반보드
+### 1. 페이지 목차
+
+- 버튼 클릭 후 해당 페이지 이동
+
+<div>
+  <img src="/src/assets/readme/Category.png" width="500">
+</div>
+
+### 2. 칸반보드
+
 - 항목 추가 버튼 클릭 후 이슈 아이템 생성
 - 드래그 앤 드랍을 통해 이슈 아이템 순서 및 속성 변경
 
@@ -35,18 +48,19 @@
 <div>
   <img src="/src/assets/readme/Modal.png" width="800">
 </div>
-
 <br/>
+
+### 3. 언어 검색
 
 ## 실행 방법
 
-```
+```sh
 // dev
-1. npm install
-2. npm run dev
+1. yarn install
+2. yarn dev
 
 // build
-1. npm run install
-2. npm run build
-3. npm run start
+1. yarn install
+2. yarn build
+3. yarn start
 ```
