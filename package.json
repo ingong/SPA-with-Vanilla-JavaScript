@@ -25,6 +25,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^27.4.5",
+    "mini-css-extract-plugin": "^2.6.0",
     "path": "^0.12.7",
     "prettier": "^2.5.1",
     "serve": "^13.0.2",
