@@ -1,16 +1,14 @@
-## VanillaJS SPA
+## SPA_Without_Library
 
-순수 JavaScript와 번들링 도구를 활용해 개발한 프로젝트입니다.
+순수 JS/TS 와 번들링 도구를 활용해 개발 중인 프로젝트입니다.
 
 ### 기술스택
 
-[![TypeScript Badge](https://img.shields.io/badge/Typescript-235A97?style=flat-square&logo=Typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TypeScript Badge](https://img.shields.io/badge/Typescript-235A97?style=flat-square&logo=Typescript&logoColor=white)]()
 [![JavaScript Badge](https://img.shields.io/badge/JavaScript-FFFFFF?style=flat-square&logo=JavaScript&logoColor=yellow)]()
 [![Yarn Badge](https://img.shields.io/badge/Yarn-FFFFFF?style=flat-square&logo=Yarn&logoColor=black)]()
 [![Webpack Badge](https://img.shields.io/badge/Webpack-8DD6F9?style=flat-square&logo=Webpack&logoColor=black)]()
 [![Babel Badge](https://img.shields.io/badge/Babel-F9DC3E?style=flat-square&logo=Babel&logoColor=yellow)]()
-[![eslint Badge](https://img.shields.io/badge/eslint-4B32C3?style=flat-square&logo=eslint&logoColor=white)]()
-[![prettier Badge](https://img.shields.io/badge/prettier-F7B93E?style=flat-square&logo=prettier&logoColor=white)]()
 
 <br/>
 
