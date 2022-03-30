@@ -1,0 +1,41 @@
+@mixin Center($type) {
+  @if $type == 'horizontal' {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+  } @else if $type == 'vertical' {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+  }
+}
+
+.entry__container {
+  margin-top: 20px;
+  width: 80vw;
+  @include Center('vertical');
+
+  h2 {
+    font-size: 40px;
+    font-family: Impact, Charcoal, sans-serif;
+  }
+  article {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40%;
+    height: 135px;
+
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #ffffff;
+    box-shadow: rgb(15 15 15 / 15%) 0px 0px 0px 0.5px, rgb(15 15 15 / 3%) 0px 2px 3px;
+    transition: border-bottom ease-in 50ms;
+
+    font-size: 25px;
+    text-align: center;
+    font-family: Impact, Charcoal, sans-serif;
+  }
+}
