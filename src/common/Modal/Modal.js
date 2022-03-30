@@ -1,5 +1,5 @@
 import Component from '@/common/Component';
-import '@/style/modal.css';
+import '@/common/Modal/modal.css';
 
 export default class Modal extends Component {
   $state;
