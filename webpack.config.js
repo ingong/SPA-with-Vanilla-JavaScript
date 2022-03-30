@@ -1,9 +1,10 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-const mode = process.env.NODE_ENV;
+const TerserPlugin = require('terser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
-  mode: 'development',
+  mode,
   output: {
     path: path.resolve(__dirname, 'build'),
   },
@@ -26,6 +27,20 @@ module.exports = {
       template: '/public/index.html',
     }),
   ],
+  optimizations: {
+    minimizer:
+      mode === 'production'
+        ? [
+            new TerserPlugin({
+              terserOptions: {
+                compress: {
+                  drop_console: true,
+                },
+              },
+            }),
+          ]
+        : [],
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
