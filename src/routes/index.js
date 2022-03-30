@@ -1,4 +1,5 @@
 import KanbanBoard from '@/components/KanbanBoard';
+import Entry from '@/components/Entry';
 import { storeInit, store } from '@/store';
 import localDB from '@/db';
 
@@ -10,7 +11,10 @@ const getURLParams = (url) => {
   return result;
 };
 const pathToRegex = (path) => new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
-const routes = [{ path: '/', view: KanbanBoard }];
+const routes = [
+  { path: '/', view: KanbanBoard },
+  { path: '/entry', view: Entry },
+];
 
 export const movePage = (url) => {
   history.pushState(null, null, url);
@@ -34,6 +38,11 @@ export const router = async () => {
   } else {
     const result = localDB.get();
     switch (match.route.path) {
+      case '/entry':
+        new match.route.view('#root', {
+          pathname: ['Kanban Board', 'Language Search'],
+        });
+        break;
       case '/':
         store.dispatch(storeInit(result));
         new match.route.view('#root');
