@@ -2,6 +2,42 @@ import KanbanBoard from '@/components/KanbanBoard';
 import Entry from '@/components/Entry';
 import { storeInit, store } from '@/store';
 import localDB from '@/db';
+import { qs } from '@/utils/helper';
+
+const routes = [
+  { path: '/', view: Entry },
+  { path: '/board', view: KanbanBoard },
+  { path: '/search', view: KanbanBoard },
+];
+
+export const router = async () => {
+  let match = routes.find((v) => v.path === location.pathname);
+  if (qs('#root').firstElementChild) qs('#root').removeChild(qs('#root').firstElementChild);
+
+  switch (match.path) {
+    case '/':
+      new match.view('#root', {
+        children: [
+          { name: 'Kanban Board', route: 'board' },
+          { name: 'Language Search', route: 'search' },
+        ],
+      });
+      break;
+    case '/board':
+      new match.view('#root');
+      store.dispatch(storeInit(localDB.get()));
+      break;
+    case '/search':
+      break;
+    default:
+      return;
+  }
+};
+
+export const movePage = (url) => {
+  history.pushState(null, null, url);
+  router();
+};
 
 const getURLParams = (url) => {
   const result = {};
@@ -9,46 +45,4 @@ const getURLParams = (url) => {
     result[k] = decodeURIComponent(v);
   });
   return result;
-};
-const pathToRegex = (path) => new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
-const routes = [
-  { path: '/', view: KanbanBoard },
-  { path: '/entry', view: Entry },
-];
-
-export const movePage = (url) => {
-  history.pushState(null, null, url);
-  router();
-};
-
-export const router = async () => {
-  const pageMatches = routes.map((route) => {
-    return {
-      route,
-      isMatch: location.pathname.match(pathToRegex(route.path)),
-    };
-  });
-
-  let match = pageMatches.find((pageMatch) => pageMatch.isMatch);
-  if (!match) {
-    match = {
-      route: routes[0],
-      isMatch: true,
-    };
-  } else {
-    const result = localDB.get();
-    switch (match.route.path) {
-      case '/entry':
-        new match.route.view('#root', {
-          pathname: ['Kanban Board', 'Language Search'],
-        });
-        break;
-      case '/':
-        store.dispatch(storeInit(result));
-        new match.route.view('#root');
-        break;
-      default:
-        return;
-    }
-  }
 };
