@@ -6,6 +6,7 @@
     "jest": true
   },
   "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "allowImportExportEverywhere": true,
     "ecmaVersion": 12,
