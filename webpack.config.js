@@ -43,6 +43,7 @@ module.exports = {
           : false,
       hash: mode === 'production'
     }),
+    new MiniCssExtractPlugin()
   ],
   optimization: {
     minimizer:
