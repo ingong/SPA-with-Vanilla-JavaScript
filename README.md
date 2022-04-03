@@ -26,7 +26,7 @@
 
 ### 1. 페이지 목차
 
-- 버튼 클릭 후 해당 페이지 이동
+- 버튼 클릭을 통해 해당 페이지로 이동
 
 <div>
   <img src="/src/assets/readme/Category.png" width="500">
