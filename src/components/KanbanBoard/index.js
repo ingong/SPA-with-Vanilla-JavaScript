@@ -18,10 +18,6 @@ export default class KanbanBoard extends Component {
     `;
   }
 
-  cleanUpChildren() {
-    if (qs('.kanban-container')) qs('.kanban-container').innerHTML = '';
-  }
-
   renderChildren() {
     ['TODO', 'IN_PROGRESS', 'DONE'].map(
       (value) =>
@@ -35,16 +31,8 @@ export default class KanbanBoard extends Component {
     );
   }
 
-  setEvent() {
-    const kanbanSelector = qs('.kanban-container');
-    const useRefSelector = qs('.useRef');
-    kanbanSelector.addEventListener('dragstart', (e) => {
-      const { id, status } = e.target.dataset;
-      useRefSelector.dataset.id = id;
-      useRefSelector.dataset.status = status;
-    });
-    kanbanSelector.addEventListener('drop', (e) => this.handleDropinColumn(e.target.dataset, store.getState()));
-    kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
+  cleanUpChildren() {
+    for (const child of [...qs('.kanban-container').children]) child.remove();
   }
 
   setUp() {
@@ -52,14 +40,24 @@ export default class KanbanBoard extends Component {
     store.subscribe(this.renderChildren.bind(this));
   }
 
-  handleDropinColumn({ id, status }, itemList) {
-    if (id !== 'column') return;
+  setEvent() {
+    const kanbanSelector = qs('.kanban-container');
+    kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
+    kanbanSelector.addEventListener('drop', (e) => this.handleDropinColumn(e.target.dataset, store.getState()));
+    kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
+  }
 
-    const useRefSelector = qs('.useRef');
-    const dragItem = itemList.find((v) => v.id === useRefSelector.dataset.id);
+  handleRefSelector(target) {
+    const { id, status } = target.dataset;
+    qs('.useRef').dataset.id = id;
+    qs('.useRef').dataset.status = status;
+  }
+
+  handleDropinColumn({ status }, itemList) {
+    const dragItem = itemList.find((v) => v.id === qs('.useRef').dataset.id);
     const order = getMaxOrder(itemList, status) + 1;
-
     const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
+
     store.dispatch(updateItem(toBeChangeItem));
     localDB.set(toBeChangeItem.id, toBeChangeItem);
   }
