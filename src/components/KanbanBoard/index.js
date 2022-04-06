@@ -3,6 +3,7 @@ import { qs, getNewDateString } from '@/utils/helper';
 import { getMaxOrder } from '@/utils/board';
 import KanbanColumn from '@/components/KanbanColumn';
 import { store, updateItem } from '@/store';
+import EditModal from '@/components/KanbanModal/EditModal';
 import localDB from '@/db';
 import '@/components/KanbanBoard/kanban.css';
 
@@ -45,6 +46,9 @@ export default class KanbanBoard extends Component {
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
     kanbanSelector.addEventListener('drop', (e) => this.handleDropinColumn(e.target.dataset, store.getState()));
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
+    kanbanSelector.addEventListener('click', (e) => {
+      if (e.target.closest('.add-btn')) this.handleAddBtnClick();
+    });
   }
 
   handleRefSelector(target) {
@@ -60,5 +64,10 @@ export default class KanbanBoard extends Component {
 
     store.dispatch(updateItem(toBeChangeItem));
     localDB.set(toBeChangeItem.id, toBeChangeItem);
+  }
+
+  handleAddBtnClick() {
+    new EditModal('.kanban-container', { category: 'createModal' });
+    qs('.createModal').classList.remove('hidden');
   }
 }
