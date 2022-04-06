@@ -1,6 +1,5 @@
 import Component from '@/common/Component';
 import Item from '@/components/KanbanColumn/Item';
-import Addbtn from '@/components/KanbanColumn/AddBtn';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import localDB from '@/db';
@@ -11,6 +10,7 @@ export default class KanbanColumn extends Component {
     <section class="kanban-column" data-status=${this.$state.name} data-id=column>
       <div class="kanban-column__title ${this.$state.name}-title">
         <h3>${this.$state.name}</h3>
+        <button class='add-btn'>항목 추가</button>
       </div>
       <div class="kanban__column-line ${this.$state.name}-line" data-status=${this.$state.name}></div>
       <ul class=${this.$state.name}-list></ul>
@@ -19,9 +19,7 @@ export default class KanbanColumn extends Component {
   }
 
   renderChildren() {
-    const kanbanColTitleClassName = `.${this.$state.name}-title`;
     const kanbanListClassName = `.${this.$state.name}-list`;
-
     const childrenTemplate = this.$state.list
       .map((value) =>
         new Item('_', {
@@ -34,7 +32,6 @@ export default class KanbanColumn extends Component {
       )
       .join('');
     qs(kanbanListClassName).insertAdjacentHTML('beforeend', childrenTemplate);
-    new Addbtn(kanbanColTitleClassName, this.$state.name);
   }
 
   setEvent() {
