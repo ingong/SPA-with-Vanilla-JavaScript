@@ -4,7 +4,7 @@ import { store, deleteItem } from '@/store/index';
 import { isValidClick } from '@/utils/board';
 import localDB from '@/db';
 
-export default class RemoveModal extends Modal {
+export default class DeleteModal extends Modal {
   $state;
 
   renderChildren(id) {
