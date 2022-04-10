@@ -35,12 +35,12 @@ export default class KanbanBoard extends Component {
     );
   }
 
-  cleanUpChildren() {
+  cleanup() {
     for (const child of [...qs('.kanban-container').children]) child.remove();
   }
 
   setUp() {
-    store.subscribe(this.cleanUpChildren.bind(this));
+    store.subscribe(this.cleanup.bind(this));
     store.subscribe(this.renderChildren.bind(this));
   }
 

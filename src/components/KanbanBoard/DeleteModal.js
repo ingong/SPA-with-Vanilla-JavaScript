@@ -9,14 +9,14 @@ export default class DeleteModal extends Modal {
 
   setModalContent(id) {
     this.$state = id;
-    this.cleanUpChildren();
+    this.cleanup();
 
     const modalContentSelector = qs('.modal__content');
     const modalContent = `<h4>${id} 아이템을 삭제하시겠습니까?</h4>`;
     modalContentSelector.insertAdjacentHTML('beforeend', modalContent);
   }
 
-  cleanUpChildren() {
+  cleanup() {
     const modalContentSelector = qs('.modal__content');
     modalContentSelector.innerHTML = '';
   }

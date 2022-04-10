@@ -20,7 +20,7 @@ export default class Component {
 
   renderChildren() {}
 
-  cleanUpChildren() {}
+  cleanup() {}
 
   setUp() {}
 
