@@ -51,7 +51,6 @@ export default class DefaultModal extends Modal {
 
   handleConfirmBtn(e) {
     let isPossibeForm = true;
-
     Array.from(Object.entries(this.$state))
       .filter((value) => value[0] === 'title' || value[0] === 'inChargeId')
       .forEach(([key, value]) => {
@@ -60,14 +59,12 @@ export default class DefaultModal extends Modal {
           isPossibeForm = false;
         }
       });
-
     if (!isPossibeForm) return;
 
     const { title, inChargeId, id, order, status } = this.$state;
     if (title.length === 0 || inChargeId.length === 0) return;
     if (id.length > 0) updateExistItem(title, inChargeId, order, id, status);
     else createNewItem(title, inChargeId);
-
     this.handleClose(e, false);
   }
 
@@ -91,7 +88,7 @@ export default class DefaultModal extends Modal {
     qs('.input__inChargeId').addEventListener('keyup', (e) => this.handleInput(e, 'inChargeId'));
   }
 
-  setItemContent(id) {
+  setModalContent(id) {
     if (id === undefined) return;
     const item = store.getState().find((value) => value.id === id);
     this.$state = { ...item, initialInChargeId: item.inChargeId, initialTitle: item.title };

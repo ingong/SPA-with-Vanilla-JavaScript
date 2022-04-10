@@ -7,7 +7,7 @@ import localDB from '@/db';
 export default class DeleteModal extends Modal {
   $state;
 
-  renderChildren(id) {
+  setModalContent(id) {
     this.$state = id;
     this.cleanUpChildren();
 
