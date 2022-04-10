@@ -30,25 +30,6 @@ export default class Item extends Component {
     `;
   }
 
-  handleDropItem({ currentTarget }) {
-    const itemList = store.getState();
-    const targetStatus = currentTarget.dataset.status;
-    const targetId = currentTarget.dataset.id;
-    const order = getNewOrder(itemList, targetStatus, targetId);
-
-    const useRefSelector = qs('.useRef');
-    const dragItem = itemList.find((item) => item.id === useRefSelector.dataset.id);
-    const toBeChangeItem = {
-      ...dragItem,
-      status: targetStatus,
-      order,
-      lastModifiedTime: getNewDateString(),
-    };
-
-    store.dispatch(updateItem(toBeChangeItem));
-    localDB.set(toBeChangeItem.id, toBeChangeItem);
-  }
-
   setEvent() {
     const itemSelector = qs(`.${this.$state.id}`);
     if (!itemSelector) return;
@@ -65,10 +46,5 @@ export default class Item extends Component {
         itemSelector.classList.remove('drag__enter');
       }, 100);
     });
-    itemSelector.addEventListener('drop', (e) => {
-      itemSelector.classList.remove('drag__enter');
-      this.handleDropItem(e);
-    });
-    itemSelector.addEventListener('dragover', (e) => e.preventDefault());
   }
 }

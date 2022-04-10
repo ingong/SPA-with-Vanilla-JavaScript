@@ -7,7 +7,7 @@ import { store, updateItem } from '@/store';
 import localDB from '@/db';
 
 import { qs, getNewDateString } from '@/utils/helper';
-import { getMaxOrder } from '@/utils/board';
+import { getMaxOrder, getNewOrder } from '@/utils/board';
 import '@/components/KanbanBoard/style/board.scss';
 
 export default class KanbanBoard extends Component {
@@ -48,10 +48,10 @@ export default class KanbanBoard extends Component {
     const kanbanSelector = qs('.kanban-container');
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
-    kanbanSelector.addEventListener(
-      'drop',
-      ({ target }) => target.dataset.id === 'column' && this.handleDropinColumn(target.dataset, store.getState()),
-    );
+    kanbanSelector.addEventListener('drop', ({ target }) => {
+      target.dataset.id === 'column' && this.handleDropInColumn(target.dataset);
+      target.closest('article') && this.handleDropBetweenItem(target.closest('article'));
+    });
     kanbanSelector.addEventListener('click', ({ target }) => {
       target.closest('.addBtn') && this.handleAddBtnClick();
       target.closest('.modify-button') && this.handleModifyBtnClick(target);
@@ -65,12 +65,28 @@ export default class KanbanBoard extends Component {
     qs('.useRef').dataset.status = status;
   }
 
-  handleDropinColumn({ status }, itemList) {
+  handleDropInColumn({ status }) {
+    const itemList = store.getState();
     const dragItem = itemList.find((v) => v.id === qs('.useRef').dataset.id);
     const order = getMaxOrder(itemList, status) + 1;
     const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
     store.dispatch(updateItem(toBeChangeItem));
     localDB.set(toBeChangeItem.id, toBeChangeItem);
+  }
+
+  handleDropBetweenItem(target) {
+    const itemList = store.getState();
+    const { id, status } = target.dataset;
+    const order = getNewOrder(itemList, status, id);
+    const dragItem = itemList.find((item) => item.id === qs('.useRef').dataset.id);
+    const shouldChangeItem = {
+      ...dragItem,
+      status,
+      order,
+      lastModifiedTime: getNewDateString(),
+    };
+    store.dispatch(updateItem(shouldChangeItem));
+    localDB.set(shouldChangeItem.id, shouldChangeItem);
   }
 
   handleAddBtnClick() {
