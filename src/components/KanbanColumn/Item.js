@@ -15,15 +15,15 @@ export default class Item extends Component {
   template() {
     return `
     <article class="item ${this.$state.id}" data-id=${this.$state.id} data-status=${this.$state.status} draggable=true>
-      <div class="item-top">
+      <div class="item__upper">
         <p>${this.$state.id}</p>
-        <div class="item-top-btn">
-          <button class="item__modify">수정</button>
-          <button class="item__delete">삭제</button>
+        <div class="item__upper-btns">
+          <button class="modify-button">수정</button>
+          <button class="delete-button">삭제</button>
         </div>
       </div>
       <h5>${this.$state.title}</h5>      
-      <div class="item-bottom">
+      <div class="item__bottom">
         <span>${this.$state.inChargeId}</span>
         <span>${this.$state.lastModifiedTime}</span>
       </div> 
@@ -67,8 +67,8 @@ export default class Item extends Component {
     if (!itemSelector) return;
 
     const useRefSelector = qs('.useRef');
-    const deleteBtnSelector = qs('.item__delete', itemSelector);
-    const modifyBtnSelector = qs('.item__modify', itemSelector);
+    const deleteBtnSelector = qs('.delete-button', itemSelector);
+    const modifyBtnSelector = qs('.modify-button', itemSelector);
 
     deleteBtnSelector.addEventListener('click', () => this.setDeleteModal());
     modifyBtnSelector.addEventListener('click', () => this.setModifyModal());

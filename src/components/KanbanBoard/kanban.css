@@ -50,7 +50,7 @@ h1 {
 }
 
 /* KanbanItem */
-.kanban-item {
+.item {
   width: 90%;
   height: 135px;
   padding: 10px;
@@ -58,20 +58,20 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 
   cursor: grab;
   border-radius: 3px;
   background-color: #ffffff;
   box-shadow: rgb(15 15 15 / 15%) 0px 0px 0px 0.5px, rgb(15 15 15 / 3%) 0px 2px 3px;
-  transition: border-bottom ease-in 50ms;
+  transition: border-bottom ease-in-out 50ms;
 }
 
 .drag__enter {
-  border-bottom: 4px solid #2d6ecf;
+  border-bottom: 3px solid #2d6ecf;
 }
 
-.item-top {
+.item__upper {
   padding-top: 5px;
   text-align: center;
   display: flex;
@@ -80,25 +80,25 @@ h1 {
   position: relative;
 }
 
-.item-top > p {
+.item__upper > p {
   padding-top: 5px;
 }
 
-.item-top-btn {
+.item__upper-btns {
   width: 80px;
   display: flex;
   justify-content: space-between;
 }
 
-.item-top-btn > button {
+.item__upper-btns > button {
   padding: 6px;
 }
 
-.item-bottom {
+.item__bottom {
   display: flex;
   justify-content: space-between;
 }
 
-.kanban-item {
+.item {
   overflow: scroll;
 }
