@@ -1,11 +1,13 @@
 import Component from '@/common/Component';
+import KanbanColumn from '@/components/KanbanBoard/Column';
+import EditModal from '@/components/KanbanBoard/EditModal';
+
+import { store, updateItem } from '@/store';
+import localDB from '@/db';
+
 import { qs, getNewDateString } from '@/utils/helper';
 import { getMaxOrder } from '@/utils/board';
-import KanbanColumn from '@/components/KanbanColumn';
-import { store, updateItem } from '@/store';
-import EditModal from '@/components/KanbanModal/EditModal';
-import localDB from '@/db';
-import '@/components/KanbanBoard/kanban.css';
+import '@/components/KanbanBoard/style/board.scss';
 
 export default class KanbanBoard extends Component {
   template() {
@@ -44,7 +46,7 @@ export default class KanbanBoard extends Component {
   setEvent() {
     const kanbanSelector = qs('.kanban-container');
     kanbanSelector.addEventListener('click', ({ target }) => {
-      target.closest('.add-btn') && this.handleAddBtnClick();
+      target.closest('.addBtn') && this.handleAddBtnClick();
     });
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
     kanbanSelector.addEventListener(

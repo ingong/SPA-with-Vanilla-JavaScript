@@ -1,5 +1,5 @@
 import Component from '@/common/Component';
-import Item from '@/components/KanbanColumn/Item';
+import Item from '@/components/KanbanBoard/Item';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import localDB from '@/db';
@@ -10,7 +10,7 @@ export default class KanbanColumn extends Component {
     <section class="kanban-column" data-status=${this.$state.name} data-id=column>
       <div class="kanban-column__title ${this.$state.name}-title">
         <h3>${this.$state.name}</h3>
-        <button class='add-btn'>항목 추가</button>
+        <button class='addBtn'>항목 추가</button>
       </div>
       <div class="kanban__column-line ${this.$state.name}-line" data-status=${this.$state.name}></div>
       <ul class=${this.$state.name}-list></ul>
@@ -30,6 +30,10 @@ export default class KanbanColumn extends Component {
           lastModifiedTime: value.lastModifiedTime,
         }).render(),
       )
+      .map((template, index) => {
+        if (index === 0) return '<hr>' + template + '<hr>';
+        else return template + '<hr>';
+      })
       .join('');
     qs(kanbanListClassName).insertAdjacentHTML('beforeend', childrenTemplate);
   }

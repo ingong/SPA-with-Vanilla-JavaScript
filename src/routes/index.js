@@ -1,4 +1,4 @@
-import KanbanBoard from '@/components/KanbanBoard';
+import KanbanBoard from '@/components/KanbanBoard/Board';
 import Entry from '@/components/Entry';
 import { storeInit, store } from '@/store';
 import localDB from '@/db';

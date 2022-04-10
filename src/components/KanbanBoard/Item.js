@@ -2,8 +2,8 @@ import Component from '@/common/Component';
 import { qs, getNewDateString } from '@/utils/helper';
 import { getNewOrder } from '@/utils/board';
 import { store, updateItem } from '@/store/index';
-import RemoveModal from '@/components/KanbanModal/RemoveModal';
-import EditModal from '@/components/KanbanModal/EditModal';
+import RemoveModal from '@/components/KanbanBoard/RemoveModal';
+import EditModal from '@/components/KanbanBoard/EditModal';
 import localDB from '@/db';
 
 export default class Item extends Component {
