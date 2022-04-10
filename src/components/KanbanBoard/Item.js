@@ -3,7 +3,6 @@ import { qs, getNewDateString } from '@/utils/helper';
 import { getNewOrder } from '@/utils/board';
 import { store, updateItem } from '@/store/index';
 import RemoveModal from '@/components/KanbanBoard/RemoveModal';
-import EditModal from '@/components/KanbanBoard/EditModal';
 import localDB from '@/db';
 
 export default class Item extends Component {
@@ -37,12 +36,6 @@ export default class Item extends Component {
     qs('.deleteModal').classList.remove('hidden');
   }
 
-  setModifyModal() {
-    const modifyModal = new EditModal('.kanban-container', { category: 'modifyModal' });
-    modifyModal.setItemContent(this.$state.id);
-    qs('.modifyModal').classList.remove('hidden');
-  }
-
   handleDropItem({ currentTarget }) {
     const itemList = store.getState();
     const targetStatus = currentTarget.dataset.status;
@@ -68,10 +61,7 @@ export default class Item extends Component {
 
     const useRefSelector = qs('.useRef');
     const deleteBtnSelector = qs('.delete-button', itemSelector);
-    const modifyBtnSelector = qs('.modify-button', itemSelector);
-
     deleteBtnSelector.addEventListener('click', () => this.setDeleteModal());
-    modifyBtnSelector.addEventListener('click', () => this.setModifyModal());
     itemSelector.addEventListener('dragenter', () => {
       if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
       itemSelector.classList.add('drag__enter');

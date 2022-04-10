@@ -47,13 +47,15 @@ export default class KanbanBoard extends Component {
     const kanbanSelector = qs('.kanban-container');
     kanbanSelector.addEventListener('click', ({ target }) => {
       target.closest('.addBtn') && this.handleAddBtnClick();
+      target.closest('.modify-button') && this.handleModifyBtnClick(target);
+      target.closest('.delete-button') && this.handleDeleteBtnClick(target);
     });
+    kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
     kanbanSelector.addEventListener(
       'drop',
       ({ target }) => target.dataset.id === 'column' && this.handleDropinColumn(target.dataset, store.getState()),
     );
-    kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
   }
 
   handleRefSelector(target) {
@@ -74,5 +76,16 @@ export default class KanbanBoard extends Component {
   handleAddBtnClick() {
     new EditModal('.kanban-container', { category: 'createModal' });
     qs('.createModal').classList.remove('hidden');
+  }
+
+  handleModifyBtnClick(target) {
+    const modifyModal = new EditModal('.kanban-container', { category: 'modifyModal' });
+    const id = target.closest('.item').dataset.id;
+    modifyModal.setItemContent(id);
+    qs('.modifyModal').classList.remove('hidden');
+  }
+
+  handleDeleteBtnClick() {
+    console.log('delete');
   }
 }
