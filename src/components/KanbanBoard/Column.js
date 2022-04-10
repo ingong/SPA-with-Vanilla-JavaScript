@@ -3,6 +3,7 @@ import Item from '@/components/KanbanBoard/Item';
 import { qs, getNewDateString } from '@/utils/helper';
 import { store, updateItem } from '@/store/index';
 import localDB from '@/db';
+import '@/components/KanbanBoard/style/column.scss';
 
 export default class KanbanColumn extends Component {
   template() {
@@ -19,7 +20,6 @@ export default class KanbanColumn extends Component {
   }
 
   renderChildren() {
-    const kanbanListClassName = `.${this.$state.name}-list`;
     const childrenTemplate = this.$state.list
       .map((value) =>
         new Item('_', {
@@ -35,54 +35,59 @@ export default class KanbanColumn extends Component {
         else return template + '<hr>';
       })
       .join('');
+    const kanbanListClassName = `.${this.$state.name}-list`;
     qs(kanbanListClassName).insertAdjacentHTML('beforeend', childrenTemplate);
   }
 
   setEvent() {
-    // const divideLineSelector = qs(`.${this.$state.name}-line`);
-    // divideLineSelector.addEventListener('dragenter', () => {
-    //   divideLineSelector.classList.add('drag__enter');
-    // });
-    // divideLineSelector.addEventListener('dragleave', () => {
-    //   divideLineSelector.classList.remove('drag__enter');
-    // });
-    // divideLineSelector.addEventListener('drop', (e) => {
-    //   divideLineSelector.classList.remove('drag__enter');
-    //   handleDroppedItem(e);
-    // });
+    const divideLineSelector = qs(`.${this.$state.name}-line`);
+    divideLineSelector.addEventListener('dragenter', () => {
+      divideLineSelector.classList.add('drag__enter');
+    });
+    divideLineSelector.addEventListener('dragleave', () => {
+      divideLineSelector.classList.remove('drag__enter');
+    });
+    divideLineSelector.addEventListener('drop', (e) => {
+      console.log('drop');
+      divideLineSelector.classList.remove('drag__enter');
+      handleDroppedItem(e);
+    });
   }
 }
 
-// const handleDroppedItem = ({ currentTarget }) => {
-//   const itemList = store.getState();
-//   const targetStatus = currentTarget.dataset.status;
-//   const filteredList = itemList.filter((item) => item.status === targetStatus).sort((a, b) => a.order - b.order);
-//   const useRefSelector = qs('.useRef');
-//   const dragItem = itemList.find((item) => item.id === useRefSelector.dataset.id);
-//   const toBeChangeItem = {
-//     ...dragItem,
-//     status: targetStatus,
-//     order: 0,
-//     lastModifiedTime: getNewDateString(),
-//   };
+const handleDroppedItem = ({ currentTarget }) => {
+  console.log('why');
+  const itemList = store.getState();
+  const targetStatus = currentTarget.dataset.status;
+  const filteredList = itemList.filter((item) => item.status === targetStatus).sort((a, b) => a.order - b.order);
+  const useRefSelector = qs('.useRef');
+  const dragItem = itemList.find((item) => item.id === useRefSelector.dataset.id);
+  const toBeChangeItem = {
+    ...dragItem,
+    status: targetStatus,
+    order: 0,
+    lastModifiedTime: getNewDateString(),
+  };
 
-//   store.dispatch(updateItem(toBeChangeItem));
-//   localDB.set(toBeChangeItem.id, toBeChangeItem);
-//   const shouldChange = filteredList.length >= 1;
-//   if (shouldChange) handleTopPosItem(filteredList);
-// };
+  console.log(toBeChangeItem);
 
-// const handleTopPosItem = (filteredList) => {
-//   const toBeChangeItem = { ...filteredList[0], lastModifiedTime: getNewDateString() };
-//   const shouldChangeTwoItemList = filteredList.slice(0, 2);
-//   const shouldChange = filteredList.length === 1 ? false : true;
-//   if (shouldChange) {
-//     store.dispatch(updateItem({ ...toBeChangeItem, order: 1 }));
-//     localDB.set(toBeChangeItem.id, toBeChangeItem);
-//   } else {
-//     const sumOfOrder = shouldChangeTwoItemList.reduce((acc, cur) => acc + cur.item, 0);
-//     const orderAvg = sumOfOrder / 2;
-//     store.dispatch(updateItem({ ...toBeChangeItem, order: orderAvg }));
-//     localDB.set(toBeChangeItem.id, { ...toBeChangeItem, order: orderAvg });
-//   }
-// };
+  store.dispatch(updateItem(toBeChangeItem));
+  localDB.set(toBeChangeItem.id, toBeChangeItem);
+  const shouldChange = filteredList.length >= 1;
+  if (shouldChange) handleTopPosItem(filteredList);
+};
+
+const handleTopPosItem = (filteredList) => {
+  const toBeChangeItem = { ...filteredList[0], lastModifiedTime: getNewDateString() };
+  const shouldChangeTwoItemList = filteredList.slice(0, 2);
+  const shouldChange = filteredList.length === 1 ? false : true;
+  if (shouldChange) {
+    store.dispatch(updateItem({ ...toBeChangeItem, order: 1 }));
+    localDB.set(toBeChangeItem.id, toBeChangeItem);
+  } else {
+    const sumOfOrder = shouldChangeTwoItemList.reduce((acc, cur) => acc + cur.item, 0);
+    const orderAvg = sumOfOrder / 2;
+    store.dispatch(updateItem({ ...toBeChangeItem, order: orderAvg }));
+    localDB.set(toBeChangeItem.id, { ...toBeChangeItem, order: orderAvg });
+  }
+};

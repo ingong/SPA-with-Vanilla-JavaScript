@@ -1,0 +1,52 @@
+.item {
+  width: 90%;
+  height: 135px;
+  padding: 10px;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  cursor: grab;
+  border-radius: 3px;
+  background-color: #ffffff;
+  box-shadow: rgb(15 15 15 / 15%) 0px 0px 0px 0.5px, rgb(15 15 15 / 3%) 0px 2px 3px;
+  transition: border-bottom ease-in-out 50ms;
+}
+
+.drag__enter {
+  border-bottom: 3px solid #2d6ecf;
+}
+
+.item__upper {
+  padding-top: 5px;
+  text-align: center;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  position: relative;
+}
+
+.item__upper > p {
+  padding-top: 5px;
+}
+
+.item__upper-btns {
+  width: 80px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.item__upper-btns > button {
+  padding: 6px;
+}
+
+.item__bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.item {
+  overflow: scroll;
+}

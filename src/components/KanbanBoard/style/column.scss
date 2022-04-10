@@ -1,0 +1,50 @@
+.kanban-column {
+  width: 30%;
+  height: 95%;
+  margin: 14px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #ffffff;
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    font-size: 18px;
+    width: 100%;
+  }
+
+  &__line {
+    transition: 50ms ease-in 0s;
+    width: 90%;
+    height: 5px;
+    border: 3px;
+  }
+  ul {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  ul > hr:first-child {
+    margin-bottom: 0;
+  }
+
+  hr {
+    height: 3px;
+    width: 90%;
+    margin-bottom: 10px;
+  }
+
+  hr.drag {
+    background-color: #2d6ecf;
+  }
+
+  .addBtn {
+    padding: 8px;
+  }
+}

@@ -3,6 +3,7 @@ import { qs, getNewDateString } from '@/utils/helper';
 import { getNewOrder } from '@/utils/board';
 import { store, updateItem } from '@/store/index';
 import localDB from '@/db';
+import '@/components/KanbanBoard/style/item.scss';
 
 export default class Item extends Component {
   render() {
