@@ -2,7 +2,6 @@ import Component from '@/common/Component';
 import { qs, getNewDateString } from '@/utils/helper';
 import { getNewOrder } from '@/utils/board';
 import { store, updateItem } from '@/store/index';
-import RemoveModal from '@/components/KanbanBoard/RemoveModal';
 import localDB from '@/db';
 
 export default class Item extends Component {
@@ -30,12 +29,6 @@ export default class Item extends Component {
     `;
   }
 
-  setDeleteModal() {
-    const deleteModal = new RemoveModal('.kanban-container', { category: 'deleteModal' });
-    deleteModal.renderChildren(this.$state.id);
-    qs('.deleteModal').classList.remove('hidden');
-  }
-
   handleDropItem({ currentTarget }) {
     const itemList = store.getState();
     const targetStatus = currentTarget.dataset.status;
@@ -58,16 +51,13 @@ export default class Item extends Component {
   setEvent() {
     const itemSelector = qs(`.${this.$state.id}`);
     if (!itemSelector) return;
-
     const useRefSelector = qs('.useRef');
-    const deleteBtnSelector = qs('.delete-button', itemSelector);
-    deleteBtnSelector.addEventListener('click', () => this.setDeleteModal());
     itemSelector.addEventListener('dragenter', () => {
       if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
       itemSelector.classList.add('drag__enter');
     });
     let timer;
-    itemSelector.addEventListener('dragleave', (e) => {
+    itemSelector.addEventListener('dragleave', () => {
       if (useRefSelector.id === itemSelector.dataset.id) return;
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {

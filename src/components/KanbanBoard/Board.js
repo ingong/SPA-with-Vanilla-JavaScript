@@ -1,6 +1,7 @@
 import Component from '@/common/Component';
 import KanbanColumn from '@/components/KanbanBoard/Column';
 import EditModal from '@/components/KanbanBoard/EditModal';
+import DeleteModal from '@/components/KanbanBoard/DeleteModal';
 
 import { store, updateItem } from '@/store';
 import localDB from '@/db';
@@ -45,17 +46,17 @@ export default class KanbanBoard extends Component {
 
   setEvent() {
     const kanbanSelector = qs('.kanban-container');
-    kanbanSelector.addEventListener('click', ({ target }) => {
-      target.closest('.addBtn') && this.handleAddBtnClick();
-      target.closest('.modify-button') && this.handleModifyBtnClick(target);
-      target.closest('.delete-button') && this.handleDeleteBtnClick(target);
-    });
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
     kanbanSelector.addEventListener(
       'drop',
       ({ target }) => target.dataset.id === 'column' && this.handleDropinColumn(target.dataset, store.getState()),
     );
+    kanbanSelector.addEventListener('click', ({ target }) => {
+      target.closest('.addBtn') && this.handleAddBtnClick();
+      target.closest('.modify-button') && this.handleModifyBtnClick(target);
+      target.closest('.delete-button') && this.handleDeleteBtnClick(target);
+    });
   }
 
   handleRefSelector(target) {
@@ -68,7 +69,6 @@ export default class KanbanBoard extends Component {
     const dragItem = itemList.find((v) => v.id === qs('.useRef').dataset.id);
     const order = getMaxOrder(itemList, status) + 1;
     const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
-
     store.dispatch(updateItem(toBeChangeItem));
     localDB.set(toBeChangeItem.id, toBeChangeItem);
   }
@@ -81,11 +81,14 @@ export default class KanbanBoard extends Component {
   handleModifyBtnClick(target) {
     const modifyModal = new EditModal('.kanban-container', { category: 'modifyModal' });
     const id = target.closest('.item').dataset.id;
-    modifyModal.setItemContent(id);
+    modifyModal.setModalContent(id);
     qs('.modifyModal').classList.remove('hidden');
   }
 
-  handleDeleteBtnClick() {
-    console.log('delete');
+  handleDeleteBtnClick(target) {
+    const deleteModal = new DeleteModal('.kanban-container', { category: 'deleteModal' });
+    const id = target.closest('.item').dataset.id;
+    deleteModal.setModalContent(id);
+    qs('.deleteModal').classList.remove('hidden');
   }
 }
