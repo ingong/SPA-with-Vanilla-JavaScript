@@ -38,11 +38,3 @@ export const movePage = (url) => {
   history.pushState(null, null, url);
   router();
 };
-
-const getURLParams = (url) => {
-  const result = {};
-  url.replace(/[?&]{1}([^=&#]+)=([^&#]*)/g, function (s, k, v) {
-    result[k] = decodeURIComponent(v);
-  });
-  return result;
-};
