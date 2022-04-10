@@ -14,7 +14,7 @@ export default class Item extends Component {
 
   template() {
     return `
-    <article class="kanban-item ${this.$state.id}" data-id=${this.$state.id} data-status=${this.$state.status} draggable=true>
+    <article class="item ${this.$state.id}" data-id=${this.$state.id} data-status=${this.$state.status} draggable=true>
       <div class="item-top">
         <p>${this.$state.id}</p>
         <div class="item-top-btn">
