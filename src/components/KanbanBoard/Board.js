@@ -50,8 +50,9 @@ export default class KanbanBoard extends Component {
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
     kanbanSelector.addEventListener('drop', ({ target }) => {
-      target.dataset.id === 'column' && this.handleDropInColumn(target.dataset);
+      target.closest('.contour-top') && this.handleDropAtTopSection(target.closest('.contour-top'));
       target.closest('article') && this.handleDropBetweenItem(target.closest('article'));
+      target.closest('.kanban-column') && this.handleDropAtEmptySection(target.dataset);
     });
     kanbanSelector.addEventListener('click', ({ target }) => {
       target.closest('.addBtn') && this.handleAddBtnClick();
@@ -75,13 +76,8 @@ export default class KanbanBoard extends Component {
     qs('.useRef').dataset.status = status;
   }
 
-  handleDropInColumn({ status }) {
-    const itemList = store.getState();
-    const dragItem = itemList.find((v) => v.id === qs('.useRef').dataset.id);
-    const order = getMaxOrder(itemList, status) + 1;
-    const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
-    store.dispatch(updateItem(toBeChangeItem));
-    localDB.set(toBeChangeItem.id, toBeChangeItem);
+  handleDropAtTopSection(target) {
+    console.log(target);
   }
 
   handleDropBetweenItem(target) {
@@ -92,6 +88,15 @@ export default class KanbanBoard extends Component {
     const shouldChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
     store.dispatch(updateItem(shouldChangeItem));
     localDB.set(shouldChangeItem.id, shouldChangeItem);
+  }
+
+  handleDropAtEmptySection({ status }) {
+    const itemList = store.getState();
+    const dragItem = itemList.find((v) => v.id === qs('.useRef').dataset.id);
+    const order = getMaxOrder(itemList, status) + 1;
+    const toBeChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
+    store.dispatch(updateItem(toBeChangeItem));
+    localDB.set(toBeChangeItem.id, toBeChangeItem);
   }
 
   handleAddBtnClick() {
