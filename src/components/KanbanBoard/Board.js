@@ -52,7 +52,7 @@ export default class KanbanBoard extends Component {
     kanbanSelector.addEventListener('drop', ({ target }) => {
       target.closest('.contour-top') && this.handleDropAtTopSection(target.closest('.contour-top'));
       target.closest('article') && this.handleDropBetweenItem(target.closest('article'));
-      target.closest('.kanban-column') && this.handleDropAtEmptySection(target.dataset);
+      target.dataset.id === 'column' && this.handleDropAtEmptySection(target.dataset);
     });
     kanbanSelector.addEventListener('click', ({ target }) => {
       target.closest('.addBtn') && this.handleAddBtnClick();
@@ -77,7 +77,24 @@ export default class KanbanBoard extends Component {
   }
 
   handleDropAtTopSection(target) {
-    console.log(target);
+    const itemList = store.getState();
+    const targetStatus = target.parentNode.dataset.status;
+    const droppedItem = itemList.find((item) => item.id === qs('.useRef').dataset.id);
+    const shouldChangeItem = { ...droppedItem, status: targetStatus, order: 0, lastModifiedTime: getNewDateString() };
+    const filterByStatusList = itemList.filter((item) => item.status === targetStatus).sort((a, b) => a.order - b.order);
+
+    if (filterByStatusList.length < 1) {
+      store.dispatch(updateItem(shouldChangeItem));
+      localDB.set(shouldChangeItem.id, shouldChangeItem);
+    } else {
+      const averageOrder = filterByStatusList.slice(0, 2).reduce((acc, cur) => acc + cur.order, 0) / 2;
+      const newOrder = Math.min(averageOrder, 1);
+      const topLocatedItem = { ...filterByStatusList[0], order: newOrder };
+      store.dispatch(updateItem(shouldChangeItem));
+      store.dispatch(updateItem(topLocatedItem));
+      localDB.set(shouldChangeItem.id, shouldChangeItem);
+      localDB.set(topLocatedItem.id, topLocatedItem);
+    }
   }
 
   handleDropBetweenItem(target) {
