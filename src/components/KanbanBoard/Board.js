@@ -46,7 +46,7 @@ export default class KanbanBoard extends Component {
 
   setEvent() {
     let kanbanSelector = qs('.kanban-container');
-    let timer;
+    let itemTimer, contourTimer;
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
     kanbanSelector.addEventListener('drop', ({ target }) => {
@@ -63,7 +63,8 @@ export default class KanbanBoard extends Component {
       target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'enter');
     });
     kanbanSelector.addEventListener('dragleave', ({ target }) => {
-      target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'leave', timer);
+      target.closest('.contour-top') && this.handleContourDragEvent(target.closest('.contour-top'), 'leave', contourTimer);
+      target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'leave', itemTimer);
     });
     kanbanSelector = null;
   }
@@ -112,9 +113,14 @@ export default class KanbanBoard extends Component {
     qs('.deleteModal').classList.remove('hidden');
   }
 
-  handleContourDragEvent(target, eventType) {
+  handleContourDragEvent(target, eventType, timer) {
     if (eventType === 'enter') target.classList.add('drag');
-    else if (eventType === 'leave') target.classList.remove('drag');
+    else if (eventType === 'leave') {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        target.classList.remove('drag');
+      }, 250);
+    }
   }
 
   handleItemDragEvent(target, eventType, timer) {
@@ -125,7 +131,7 @@ export default class KanbanBoard extends Component {
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         target.nextElementSibling.classList.remove('drag');
-      }, 200);
+      }, 250);
     }
   }
 }
