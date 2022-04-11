@@ -1,8 +1,5 @@
 import Component from '@/common/Component';
-import { qs, getNewDateString } from '@/utils/helper';
-import { getNewOrder } from '@/utils/board';
-import { store, updateItem } from '@/store/index';
-import localDB from '@/db';
+
 import '@/components/KanbanBoard/style/item.scss';
 
 export default class Item extends Component {
@@ -28,23 +25,5 @@ export default class Item extends Component {
       </div> 
     </article>
     `;
-  }
-
-  setEvent() {
-    const itemSelector = qs(`.${this.$state.id}`);
-    if (!itemSelector) return;
-    const useRefSelector = qs('.useRef');
-    itemSelector.addEventListener('dragenter', () => {
-      if (useRefSelector.dataset.id === itemSelector.dataset.id) return;
-      itemSelector.classList.add('drag__enter');
-    });
-    let timer;
-    itemSelector.addEventListener('dragleave', () => {
-      if (useRefSelector.id === itemSelector.dataset.id) return;
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        itemSelector.classList.remove('drag__enter');
-      }, 100);
-    });
   }
 }

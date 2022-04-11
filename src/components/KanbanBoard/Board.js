@@ -45,7 +45,8 @@ export default class KanbanBoard extends Component {
   }
 
   setEvent() {
-    const kanbanSelector = qs('.kanban-container');
+    let kanbanSelector = qs('.kanban-container');
+    let timer;
     kanbanSelector.addEventListener('dragover', (e) => e.preventDefault());
     kanbanSelector.addEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
     kanbanSelector.addEventListener('drop', ({ target }) => {
@@ -57,6 +58,14 @@ export default class KanbanBoard extends Component {
       target.closest('.modify-button') && this.handleModifyBtnClick(target);
       target.closest('.delete-button') && this.handleDeleteBtnClick(target);
     });
+    kanbanSelector.addEventListener('dragenter', ({ target }) => {
+      target.closest('.contour-top') && this.handleContourDragEvent(target.closest('.contour-top'), 'enter');
+      target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'enter');
+    });
+    kanbanSelector.addEventListener('dragleave', ({ target }) => {
+      target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'leave', timer);
+    });
+    kanbanSelector = null;
   }
 
   handleRefSelector(target) {
@@ -79,12 +88,7 @@ export default class KanbanBoard extends Component {
     const { id, status } = target.dataset;
     const order = getNewOrder(itemList, status, id);
     const dragItem = itemList.find((item) => item.id === qs('.useRef').dataset.id);
-    const shouldChangeItem = {
-      ...dragItem,
-      status,
-      order,
-      lastModifiedTime: getNewDateString(),
-    };
+    const shouldChangeItem = { ...dragItem, status, order, lastModifiedTime: getNewDateString() };
     store.dispatch(updateItem(shouldChangeItem));
     localDB.set(shouldChangeItem.id, shouldChangeItem);
   }
@@ -106,5 +110,22 @@ export default class KanbanBoard extends Component {
     const id = target.closest('.item').dataset.id;
     deleteModal.setModalContent(id);
     qs('.deleteModal').classList.remove('hidden');
+  }
+
+  handleContourDragEvent(target, eventType) {
+    if (eventType === 'enter') target.classList.add('drag');
+    else if (eventType === 'leave') target.classList.remove('drag');
+  }
+
+  handleItemDragEvent(target, eventType, timer) {
+    if (eventType === 'enter') {
+      if (qs('.useRef').dataset.id === target.dataset.id) return;
+      target.nextElementSibling.classList.add('drag');
+    } else if (eventType === 'leave') {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        target.nextElementSibling.classList.remove('drag');
+      }, 200);
+    }
   }
 }
