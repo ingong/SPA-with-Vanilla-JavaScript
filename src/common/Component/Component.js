@@ -15,10 +15,10 @@ export default class Component {
 
   render() {
     qs(this.$target).insertAdjacentHTML('beforeend', this.template());
-    this.renderChildren();
+    this.mountChild();
   }
 
-  renderChildren() {}
+  mountChild() {}
 
   cleanup() {}
 

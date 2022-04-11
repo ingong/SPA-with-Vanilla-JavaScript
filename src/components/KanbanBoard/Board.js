@@ -22,7 +22,7 @@ export default class KanbanBoard extends Component {
     `;
   }
 
-  renderChildren() {
+  mountChild() {
     ['TODO', 'IN_PROGRESS', 'DONE'].map(
       (value) =>
         new KanbanColumn('.kanban-container', {
@@ -41,7 +41,7 @@ export default class KanbanBoard extends Component {
 
   setUp() {
     store.subscribe(this.cleanup.bind(this));
-    store.subscribe(this.renderChildren.bind(this));
+    store.subscribe(this.mountChild.bind(this));
   }
 
   setEvent() {

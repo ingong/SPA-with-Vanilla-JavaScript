@@ -25,7 +25,7 @@ export default class DefaultModal extends Modal {
     `;
   }
 
-  renderChildren() {
+  mountChild() {
     this.cleanup();
     const modalContentSelector = qs('.modal__content');
     modalContentSelector.insertAdjacentHTML('beforeend', this.modaltemplate());
