@@ -35,12 +35,16 @@
   }
 
   hr {
-    height: 3px;
+    height: 4px;
     width: 90%;
     margin-bottom: 10px;
+    transition: background-color 0.5s;
   }
 
   hr.drag {
+    background-color: #2d6ecf;
+  }
+  .contour-top.drag {
     background-color: #2d6ecf;
   }
 
