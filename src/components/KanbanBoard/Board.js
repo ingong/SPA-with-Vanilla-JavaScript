@@ -36,7 +36,8 @@ export default class KanbanBoard extends Component {
   }
 
   cleanup() {
-    for (const child of [...qs('.kanban-container').children]) child.remove();
+    this.removeEvent();
+    qs('.kanban-container').replaceChildren();
   }
 
   setUp() {
@@ -64,6 +65,32 @@ export default class KanbanBoard extends Component {
       target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'enter');
     });
     kanbanSelector.addEventListener('dragleave', ({ target }) => {
+      target.closest('.contour-top') && this.handleContourDragEvent(target.closest('.contour-top'), 'leave', contourTimer);
+      target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'leave', itemTimer);
+    });
+    kanbanSelector = null;
+  }
+
+  removeEvent() {
+    let kanbanSelector = qs('.kanban-container');
+    let itemTimer, contourTimer;
+    kanbanSelector.removeEventListener('dragover', (e) => e.preventDefault());
+    kanbanSelector.removeEventListener('dragstart', ({ target }) => this.handleRefSelector(target));
+    kanbanSelector.removeEventListener('drop', ({ target }) => {
+      target.closest('.contour-top') && this.handleDropAtTopSection(target.closest('.contour-top'));
+      target.closest('article') && this.handleDropBetweenItem(target.closest('article'));
+      target.dataset.id === 'column' && this.handleDropAtEmptySection(target.dataset);
+    });
+    kanbanSelector.removeEventListener('click', ({ target }) => {
+      target.closest('.addBtn') && this.handleAddBtnClick();
+      target.closest('.modify-button') && this.handleModifyBtnClick(target);
+      target.closest('.delete-button') && this.handleDeleteBtnClick(target);
+    });
+    kanbanSelector.removeEventListener('dragenter', ({ target }) => {
+      target.closest('.contour-top') && this.handleContourDragEvent(target.closest('.contour-top'), 'enter');
+      target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'enter');
+    });
+    kanbanSelector.removeEventListener('dragleave', ({ target }) => {
       target.closest('.contour-top') && this.handleContourDragEvent(target.closest('.contour-top'), 'leave', contourTimer);
       target.closest('article') && this.handleItemDragEvent(target.closest('article'), 'leave', itemTimer);
     });
