@@ -48,7 +48,7 @@
 </div>
 <br/>
 
-### 3. 언어 검색
+### 3. Language Search
 
 ## 실행 방법
 
