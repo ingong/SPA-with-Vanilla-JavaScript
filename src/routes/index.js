@@ -1,5 +1,7 @@
-import KanbanBoard from '@/components/KanbanBoard/Board';
 import Entry from '@/components/Entry';
+import KanbanBoard from '@/components/KanbanBoard/Board';
+import LanguageSearchPage from '@/components/LanguageSearch/LanguageSearchPage';
+
 import { storeInit, store } from '@/store';
 import localDB from '@/db';
 import { qs } from '@/utils/helper';
@@ -7,7 +9,7 @@ import { qs } from '@/utils/helper';
 const routes = [
   { path: '/', view: Entry },
   { path: '/board', view: KanbanBoard },
-  { path: '/search', view: KanbanBoard },
+  { path: '/search', view: LanguageSearchPage },
 ];
 
 export const router = async () => {
@@ -28,6 +30,7 @@ export const router = async () => {
       store.dispatch(storeInit(localDB.get()));
       break;
     case '/search':
+      new match.view('#root');
       break;
     default:
       return;
