@@ -1,6 +1,7 @@
 import Entry from '@/components/Entry';
 import KanbanBoard from '@/components/KanbanBoard/Board';
 import LanguageSearchPage from '@/components/LanguageSearch/LanguageSearchPage';
+import AnimationPage from '@/components/Animation/AnimationPage';
 
 import { storeInit, store } from '@/store';
 import localDB from '@/db';
@@ -10,6 +11,7 @@ const routes = [
   { path: '/', view: Entry },
   { path: '/board', view: KanbanBoard },
   { path: '/search', view: LanguageSearchPage },
+  { path: '/animation', view: AnimationPage },
 ];
 
 export const router = async () => {
@@ -22,6 +24,7 @@ export const router = async () => {
         children: [
           { name: 'Kanban Board', route: 'board' },
           { name: 'Language Search', route: 'search' },
+          { name: 'Animation', route: 'animation' },
         ],
       });
       break;
@@ -31,6 +34,9 @@ export const router = async () => {
       break;
     case '/search':
       new match.view('#root');
+      break;
+    case '/animation':
+      new match.view();
       break;
     default:
       return;
