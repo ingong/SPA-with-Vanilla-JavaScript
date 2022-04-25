@@ -29,6 +29,10 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/,
         use: [mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'sass-loader'],
       },
+      {
+        test: /\.png/,
+        type: 'asset/resource'
+      }
     ],
   },
   plugins: [
