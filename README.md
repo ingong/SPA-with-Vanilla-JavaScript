@@ -14,41 +14,31 @@
 
 ## 구현 사항
 
-- 추상화된 컴포넌트 기반 설계
-- flux 디자인 패턴에 기반한 상태 관리
-- history API를 활용한 라우팅 기능
-- 디바운싱을 활용한 칸반보드 이벤트 최적화
-- 칸반보드 아이템 순서 유지를 위한 Order에 대한 테스트 코드 작성
+### 1. Entry
 
-<br/>
-
-## 기능
-
-### 1. 페이지 목차
-
-- 버튼 클릭을 통해 해당 페이지로 이동
-
-<div>
-  <img src="/src/assets/readme/Category.png" width="500">
-</div>
+- history API를 활용한 라우팅
 
 ### 2. 칸반보드
 
-- 항목 추가 버튼 클릭 후 이슈 아이템 생성
+- flux 디자인 패턴에 기반한 상태 관리
+- 개발자 도구를 활용한 메모리 누수 디버깅 및 개선
+- 칸반보드 아이템 순서 유지를 위한 Order에 대한 테스트 코드 작성
+- 디바운싱을 활용한 칸반보드 이벤트 최적화
 - 드래그 앤 드랍을 통해 이슈 아이템 순서 및 속성 변경
 
 <div>
   <img src="/src/assets/readme/Kanban.png" width="500">
 </div>
 
-- 이슈 제목과 담당자 ID 수정
-- 이슈 삭제 기능
-<div>
-  <img src="/src/assets/readme/Modal.png" width="800">
-</div>
-<br/>
+### 3. Animation 최적화
 
-### 3. Language Search
+- 크롬 예제 리팩토링을 통한 학습용 어플리케이션 (기존 ES5 방식 => 최신 JS 문법으로 개선)
+- requestAnimationFrame을 활용한 애니메이션 기능
+- 크롬 개발자 도구를 활용한 Runtime Performance 측정 및 개선
+- Optimize 버튼 클릭 시 강제 동기 레이아웃 방식 제거를 통한 렌더링 최적화
+  - Add 버튼 클릭 시 요소가 10개씩 추가되며 최소 100개의 요소가 화면에 존재할 때 성능 이슈를 모니터링할 수 있음.
+
+<br/>
 
 ## 실행 방법
 
