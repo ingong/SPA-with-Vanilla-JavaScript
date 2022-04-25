@@ -1,6 +1,6 @@
 import '@/components/Animation/style/index.css';
 import { debounce } from './helper';
-import TestImage from '@/assets/readme/Modal.png';
+import BaseBallImg from '@/assets/readme/BaseBall.png';
 
 const ENUM = {
   maxWidth: 97,
@@ -43,7 +43,7 @@ export default class AnimationPage {
 
   initBaseTemplate() {
     const template = `
-      <img class="proto mover" src=${TestImage}/>
+      <img class="proto mover" src=${BaseBallImg}/>
       <div class="controls">
         <button class="add"></button>
         <button class="subtract" disabled></button>
@@ -112,12 +112,16 @@ export default class AnimationPage {
     cancelAnimationFrame(this.frame);
     this.elementCount += ENUM.incrementor;
     this.initApp.apply(this);
+    if (this.elementCount > ENUM.minimum) this.$subtract.disabled = false;
+    else this.$subtract.disabled = true;
     this.frame = requestAnimationFrame(this.update.bind(this));
   }
   handleSubtractBtn() {
     cancelAnimationFrame(this.frame);
     this.elementCount -= ENUM.incrementor;
     this.initApp.apply(this);
+    if (this.elementCount <= ENUM.minimum) this.$subtract.disabled = true;
+    else this.$subtract.disabled = false;
     this.frame = requestAnimationFrame(this.update.bind(this));
   }
   handleResize() {
@@ -130,7 +134,6 @@ export default class AnimationPage {
   addEvent() {
     document.querySelector('.stop').addEventListener('click', this.handleStop.bind(this));
     document.querySelector('.optimize').addEventListener('click', this.handleOptimize.bind(this));
-
     this.$add.addEventListener('click', this.handleAddBtn.bind(this));
     this.$subtract.addEventListener('click', this.handleSubtractBtn.bind(this));
     window.addEventListener(
