@@ -55,7 +55,7 @@ export default class AnimationPage {
         </a>
       </div>
     `;
-    this.$root.innerHTML = template;
+    this.$root.insertAdjacentHTML('beforeend', template);
   }
 
   initApp() {
@@ -140,6 +140,7 @@ export default class AnimationPage {
       'resize',
       debounce(() => this.handleResize.apply(this), 500),
     );
+    window.addEventListener('popstate', () => cancelAnimationFrame(this.frame));
   }
   update() {
     for (let index = 0; index < this.elementCount; index++) {
