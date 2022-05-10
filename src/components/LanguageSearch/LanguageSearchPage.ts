@@ -1,5 +1,4 @@
 import { qs } from '@/utils/helper';
-import '@/components/LanguageSearch/style/page.scss';
 
 interface ObjectType {
   count: number;
