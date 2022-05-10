@@ -16,7 +16,7 @@ const routes = [
 
 export const router = async () => {
   let match = routes.find((v) => v.path === location.pathname);
-  if (qs('#root').firstElementChild) qs('#root').removeChild(qs('#root').firstElementChild);
+  if (qs('#root').firstElementChild) qs('#root').replaceChildren();
 
   switch (match.path) {
     case '/':
@@ -36,7 +36,7 @@ export const router = async () => {
       new match.view('#root');
       break;
     case '/animation':
-      new match.view();
+      new match.view('#root');
       break;
     default:
       return;
