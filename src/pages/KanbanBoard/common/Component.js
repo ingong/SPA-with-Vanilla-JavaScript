@@ -1,4 +1,4 @@
-import { qs } from '@/utils/helper';
+import { qs } from '@/pages/KanbanBoard/utils/helper';
 
 export default class Component {
   $target;

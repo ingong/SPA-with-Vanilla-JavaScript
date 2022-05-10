@@ -1,7 +1,7 @@
-import Component from '@/common/Component';
-import Item from '@/components/KanbanBoard/Item';
-import { qs } from '@/utils/helper';
-import '@/components/KanbanBoard/style/column.scss';
+import Component from '@/pages/KanbanBoard/common/Component';
+import Item from '@/pages/KanbanBoard/components/Item';
+import { qs } from '@/pages/KanbanBoard/utils/helper';
+import '@/pages/KanbanBoard/style/column.scss';
 
 export default class KanbanColumn extends Component {
   template() {

@@ -5,14 +5,9 @@ export const getMaxOrder = (itemList, status) => {
 };
 
 export const getNewOrder = (itemList, targetStatus, targetId) => {
-  const filteredItemList = itemList
-    .filter((item) => item.status === targetStatus)
-    .sort((a, b) => a.order - b.order);
+  const filteredItemList = itemList.filter((item) => item.status === targetStatus).sort((a, b) => a.order - b.order);
   const upperIndexNearDropArea = filteredItemList.findIndex((item) => item.id === targetId);
-  const itemsNearDropArea = filteredItemList.slice(
-    upperIndexNearDropArea,
-    upperIndexNearDropArea + 2,
-  );
+  const itemsNearDropArea = filteredItemList.slice(upperIndexNearDropArea, upperIndexNearDropArea + 2);
 
   if (itemsNearDropArea.length === 1) return itemsNearDropArea[0].order + 1;
   else if (itemsNearDropArea.length === 2) {

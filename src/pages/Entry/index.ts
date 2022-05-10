@@ -1,5 +1,4 @@
-import { qs } from '@/utils/helper';
-import '@/components/Entry/index.scss';
+import '@/pages/Entry/index.scss';
 import { movePage } from '@/routes';
 
 interface EntryPropType {
@@ -48,4 +47,9 @@ export default class Entry {
       movePage(route);
     };
   }
+}
+
+function qs(selector: string, scope = document): HTMLElement {
+  if (!selector) throw 'no selector';
+  return scope.querySelector(selector) as HTMLElement;
 }

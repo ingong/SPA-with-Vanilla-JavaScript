@@ -1,6 +1,5 @@
-import Component from '@/common/Component';
-
-import '@/components/KanbanBoard/style/item.scss';
+import Component from '@/pages/KanbanBoard/common/Component';
+import '@/pages/KanbanBoard/style/item.scss';
 
 export default class Item extends Component {
   render() {

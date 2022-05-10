@@ -1,11 +1,11 @@
-import Entry from '@/components/Entry';
-import KanbanBoard from '@/components/KanbanBoard/Board';
-import LanguageSearchPage from '@/components/LanguageSearch/LanguageSearchPage';
-import AnimationPage from '@/components/Animation/AnimationPage';
+import Entry from '@/pages/Entry';
+import KanbanBoard from '@/pages/KanbanBoard/components/Board';
+import LanguageSearchPage from '@/pages/LanguageSearch/LanguageSearchPage';
+import AnimationPage from '@/pages/Animation/AnimationPage';
 
-import { storeInit, store } from '@/store';
-import localDB from '@/db';
-import { qs } from '@/utils/helper';
+import { storeInit, store } from '@/pages/KanbanBoard/store';
+import localDB from '@/pages/KanbanBoard/db';
+import { qs } from '@/pages/KanbanBoard/utils/helper';
 
 const routes = [
   { path: '/', view: Entry },

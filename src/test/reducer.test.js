@@ -1,5 +1,5 @@
-import data from '@/db/data';
-import { store, storeInit, createItem, updateItem, deleteItem } from '@/store/index';
+import data from '@/pages/KanbanBoard/db/data';
+import { store, storeInit, createItem, updateItem, deleteItem } from '@/pages/KanbanBoard/store/index';
 
 const toBeCreateItem = {
   status: 'TODO',

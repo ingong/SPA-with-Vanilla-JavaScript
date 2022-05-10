@@ -1,4 +1,4 @@
-import '@/components/Animation/style/index.css';
+import '@/pages/Animation/style/index.css';
 import { debounce } from './helper';
 import BaseBallImg from '@/assets/readme/BaseBall.png';
 

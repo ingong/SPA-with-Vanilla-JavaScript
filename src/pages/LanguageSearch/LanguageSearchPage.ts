@@ -1,9 +1,3 @@
-import { qs } from '@/utils/helper';
-
-interface ObjectType {
-  count: number;
-}
-
 export default class CounterPage {
   $target;
   #state;
@@ -50,4 +44,13 @@ export default class CounterPage {
   cleanup() {
     qs('#root').replaceChildren();
   }
+}
+
+interface ObjectType {
+  count: number;
+}
+
+function qs(selector: string, scope = document): HTMLElement {
+  if (!selector) throw 'no selector';
+  return scope.querySelector(selector) as HTMLElement;
 }

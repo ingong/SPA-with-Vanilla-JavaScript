@@ -1,5 +1,5 @@
-import data from '@/db/data';
-import { getMaxOrder, getNewOrder } from '@/utils/board';
+import data from '@/pages/KanbanBoard/db/data';
+import { getMaxOrder, getNewOrder } from '@/pages/KanbanBoard/utils/board';
 
 let jsonData;
 

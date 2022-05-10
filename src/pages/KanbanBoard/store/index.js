@@ -1,5 +1,5 @@
-import { createStore } from '@/store/createStore';
-import { reducer } from '@/store/reducer';
+import { createStore } from '@/pages/KanbanBoard/store/createStore';
+import { reducer } from '@/pages/KanbanBoard/store/reducer';
 
 export const store = createStore(reducer);
 export const actionType = {

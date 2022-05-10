@@ -1,5 +1,5 @@
-import Component from '@/common/Component';
-import '@/common/Modal/modal.css';
+import Component from '@/pages/KanbanBoard/common/Component';
+import '@/pages/KanbanBoard/common/Modal.css';
 
 export default class Modal extends Component {
   $state;

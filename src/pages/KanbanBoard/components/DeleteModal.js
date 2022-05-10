@@ -1,8 +1,8 @@
-import Modal from '@/common/Modal';
-import { qs } from '@/utils/helper';
-import { store, deleteItem } from '@/store/index';
-import { isValidClick } from '@/utils/board';
-import localDB from '@/db';
+import Modal from '@/pages/KanbanBoard/common/Modal';
+import { qs } from '@/pages/KanbanBoard/utils/helper';
+import { store, deleteItem } from '@/pages/KanbanBoard/store/index';
+import { isValidClick } from '@/pages/KanbanBoard/utils/board';
+import localDB from '@/pages/KanbanBoard/db';
 
 export default class DeleteModal extends Modal {
   $state;

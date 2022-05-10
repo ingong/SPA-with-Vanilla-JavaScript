@@ -1,8 +1,8 @@
-import Modal from '@/common/Modal';
-import { qs, getNewDateString } from '@/utils/helper';
-import { store, createItem, updateItem } from '@/store/index';
-import { getMaxOrder, isValidClick } from '@/utils/board';
-import localDB from '@/db';
+import Modal from '@/pages/KanbanBoard/common/Modal';
+import { qs, getNewDateString } from '@/pages/KanbanBoard/utils/helper';
+import { store, createItem, updateItem } from '@/pages/KanbanBoard/store/index';
+import { getMaxOrder, isValidClick } from '@/pages/KanbanBoard/utils/board';
+import localDB from '@/pages/KanbanBoard/db';
 
 export default class DefaultModal extends Modal {
   $state = {
@@ -37,8 +37,7 @@ export default class DefaultModal extends Modal {
   }
 
   handleClose(e, isOutSideClick = true) {
-    if (isValidClick(['modal__button-container', 'modal', 'modal__content'], ['H4', 'INPUT', 'LABEL'], e.target))
-      return;
+    if (isValidClick(['modal__button-container', 'modal', 'modal__content'], ['H4', 'INPUT', 'LABEL'], e.target)) return;
 
     if (isOutSideClick) {
       const { initialInChargeId, initialTitle } = this.$state;

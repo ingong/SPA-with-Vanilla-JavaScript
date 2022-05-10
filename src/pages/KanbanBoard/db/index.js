@@ -1,4 +1,4 @@
-import data from '@/db/data';
+import data from '@/pages/KanbanBoard/db/data';
 
 const localDB = {
   init: () => localDB.get(),

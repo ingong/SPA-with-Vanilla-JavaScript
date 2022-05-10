@@ -1,14 +1,14 @@
-import Component from '@/common/Component';
-import KanbanColumn from '@/components/KanbanBoard/Column';
-import EditModal from '@/components/KanbanBoard/EditModal';
-import DeleteModal from '@/components/KanbanBoard/DeleteModal';
+import Component from '@/pages/KanbanBoard/common/Component';
+import KanbanColumn from '@/pages/KanbanBoard/components/Column';
+import EditModal from '@/pages/KanbanBoard/components/EditModal';
+import DeleteModal from '@/pages/KanbanBoard/components/DeleteModal';
 
-import { store, updateItem } from '@/store';
-import localDB from '@/db';
+import { store, updateItem } from '@/pages/KanbanBoard/store';
+import localDB from '@/pages/KanbanBoard/db';
 
-import { qs, getNewDateString } from '@/utils/helper';
-import { getMaxOrder, getNewOrder } from '@/utils/board';
-import '@/components/KanbanBoard/style/board.scss';
+import { qs, getNewDateString } from '@/pages/KanbanBoard/utils/helper';
+import { getMaxOrder, getNewOrder } from '@/pages/KanbanBoard/utils/board';
+import '@/pages/KanbanBoard/style/board.scss';
 
 export default class KanbanBoard extends Component {
   template() {
