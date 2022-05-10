@@ -18,10 +18,9 @@ ul {
   list-style: none;
 }
 
-main {
-  max-width: 1080px;
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto;
-  margin-top: 40px;
-  height: 640px;
-  overflow-y: inherit;
 }
