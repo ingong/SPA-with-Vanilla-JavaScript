@@ -99,7 +99,39 @@ export default class AnimationPage {
       this.isWorking = true;
     }
   }
-  handleOptimize({ target }) {}
+  handleOptimize({ target }) {
+    const type = target.textContent;
+    if (this.$idleBtn.disabled) this.$idleBtn.disabled = false;
+    if (this.$optWithrAFBtn.disabled) this.$optWithrAFBtn.disabled = false;
+    if (this.$optWithKeyFrameBtn.disabled) this.$optWithKeyFrameBtn.disabled = false;
+    switch (type) {
+      case 'idle':
+        // optWithrAF -> idle : 아무것도 안함
+        // keyFrame -> idle : 애니메이션 제거
+        // 상태 변경
+        this.$idleBtn.disabled = true;
+        if (this.animationState === 'optWithkeyFrame') {
+          document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
+        }
+        this.animationState = 'idle';
+        break;
+      case 'optWithrAF':
+        // idle -> optWithrAF : 아무것도 안함
+        // keyFrame -> optWithrAF : animation 제거
+        // 상태 변경
+        this.$optWithrAFBtn.disabled = true;
+        break;
+      case 'optWithKeyFrame':
+        cancelAnimationFrame(this.frame);
+        this.animationState = 'optWithKeyFrame';
+        this.$optWithKeyFrameBtn.disabled = true;
+        this.initApp.apply(this);
+        document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+        break;
+      default:
+        break;
+    }
+  }
   handleAddBtn() {
     // 상태
     cancelAnimationFrame(this.frame);
