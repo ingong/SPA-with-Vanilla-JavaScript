@@ -24,16 +24,10 @@ body {
   color: black;
 }
 
-.subtract:disabled {
-  opacity: 0.2;
-}
-.unOptimize:disabled {
-  opacity: 0.2;
-}
-.optimizeWithrAF:disabled {
-  opacity: 0.2;
-}
-.optimizeWithKeyFrame:disabled {
+.subtract:disabled,
+.idle:disabled,
+.optWithrAF:disabled,
+.optWithKeyFrame:disabled {
   opacity: 0.2;
 }
 
@@ -41,6 +35,16 @@ body {
   height: 3vw;
   position: absolute;
   z-index: 0;
+}
+
+.csskeyframe {
+  animation: move 5s ease-in-out infinite;
+}
+
+@keyframes move {
+  50% {
+    transform: translateY(-800px);
+  }
 }
 
 .border {
