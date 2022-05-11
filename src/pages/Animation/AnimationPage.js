@@ -15,8 +15,8 @@ export default class AnimationPage {
     this.isOptimize = false;
     this.isWorking = true;
 
-    // UnOptimize, OptimizeWithrAF, OptimizeWithKeyFrame
-    this.OptimizedState = 'UnOptimize';
+    // unOptimize, optimizeWithrAF, optimizeWithKeyFrame
+    this.animationState = 'unOptimize';
 
     this.$root = document.querySelector('#root');
     this.initBaseTemplate();
@@ -79,9 +79,8 @@ export default class AnimationPage {
 
     for (let index = 0; index < this.elementCount; index++) {
       const clonedNode = this.$proto.cloneNode();
-      const top = Math.floor(Math.random() * this.maxHeight);
-      // const top = this.maxHeight;
-      // console.log(this.maxHeight);
+      const top = this.animationState === 'optimizeWithKeyFrame' ? this.maxHeight : Math.floor(Math.random() * this.maxHeight);
+
       if (top === this.maxHeight) clonedNode.classList.add('up');
       else clonedNode.classList.add('down');
 
@@ -152,37 +151,44 @@ export default class AnimationPage {
     window.addEventListener('popstate', () => cancelAnimationFrame(this.frame));
   }
   update() {
-    // 상태
+    // 상태: unOptimize, optimizeWithrAF, optimizeWithKeyFrame
     for (let index = 0; index < this.elementCount; index++) {
       const element = this.movers[index];
-      if (!this.isOptimize) {
-        let pos = element.classList.contains('down') ? element.offsetTop + ENUM.distance : element.offsetTop - ENUM.distance;
-        if (pos < 0) pos = 0;
-        else if (pos > this.maxHeight) pos = this.maxHeight;
-        element.style.top = pos + 'px';
+      let pos;
 
-        if (element.offsetTop === 0) {
-          element.classList.remove('up');
-          element.classList.add('down');
-        } else if (element.offsetTop === this.maxHeight) {
-          element.classList.remove('down');
-          element.classList.add('up');
-        }
-      } else {
-        let pos = parseInt(element.style.top.replace(/\px/, ''));
-        pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
-        pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
-        element.style.top = pos + 'px';
+      switch (this.animationState) {
+        case 'unOptimize':
+          pos = element.classList.contains('down') ? element.offsetTop + ENUM.distance : element.offsetTop - ENUM.distance;
+          if (pos < 0) pos = 0;
+          else if (pos > this.maxHeight) pos = this.maxHeight;
+          element.style.top = pos + 'px';
 
-        if (pos === 0) {
-          element.classList.remove('up');
-          element.classList.add('down');
-        } else if (pos === this.maxHeight) {
-          element.classList.remove('down');
-          element.classList.add('up');
-        }
+          if (element.offsetTop === 0) {
+            element.classList.remove('up');
+            element.classList.add('down');
+          } else if (element.offsetTop === this.maxHeight) {
+            element.classList.remove('down');
+            element.classList.add('up');
+          }
+          break;
+        case 'optimizedWithrAF':
+          pos = parseInt(element.style.top.replace(/\px/, ''));
+          pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
+          pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
+          element.style.top = pos + 'px';
+
+          if (pos === 0) {
+            element.classList.remove('up');
+            element.classList.add('down');
+          } else if (pos === this.maxHeight) {
+            element.classList.remove('down');
+            element.classList.add('up');
+          }
+          break;
+        default:
+          break;
       }
     }
-    this.frame = window.requestAnimationFrame(this.update.bind(this));
+    if (this.animationState !== 'optimizedWithKeyFrame') this.frame = window.requestAnimationFrame(this.update.bind(this));
   }
 }
