@@ -99,10 +99,11 @@ export default class AnimationPage {
     }
   }
   handleOptimize({ target }) {
-    const type = target.textContent;
     if (this.$idleBtn.disabled) this.$idleBtn.disabled = false;
-    if (this.$optWithrAFBtn.disabled) this.$optWithrAFBtn.disabled = false;
-    if (this.$optWithKeyFrameBtn.disabled) this.$optWithKeyFrameBtn.disabled = false;
+    else if (this.$optWithrAFBtn.disabled) this.$optWithrAFBtn.disabled = false;
+    else if (this.$optWithKeyFrameBtn.disabled) this.$optWithKeyFrameBtn.disabled = false;
+
+    const type = target.textContent;
     switch (type) {
       case 'idle':
         if (this.animationState === 'optWithrAF') {
@@ -176,63 +177,65 @@ export default class AnimationPage {
     window.addEventListener('popstate', () => cancelAnimationFrame(this.frame));
   }
 
-  updateIdleState() {}
-  updateOptWithrAFState() {}
-  updateOptWithKeyFrameState() {}
-
   update() {
-    // 상태: idle, optWithrAF, optWithKeyFrame
     for (let index = 0; index < this.elementCount; index++) {
       const element = this.movers[index];
-      let pos;
-
+      const isLast = index === this.elementCount - 1;
       switch (this.animationState) {
         case 'idle':
-          pos = element.classList.contains('down') ? element.offsetTop + ENUM.distance : element.offsetTop - ENUM.distance;
-          if (pos < 0) pos = 0;
-          else if (pos > this.maxHeight) pos = this.maxHeight;
-          element.style.top = pos + 'px';
-
-          if (element.offsetTop === 0) {
-            element.classList.remove('up');
-            element.classList.add('down');
-          } else if (element.offsetTop === this.maxHeight) {
-            element.classList.remove('down');
-            element.classList.add('up');
-          }
-          break;
+          return this.updateIdleState(element, isLast);
         case 'optWithrAF':
-          pos = parseInt(element.style.top.replace(/\px/, ''));
-          pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
-          pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
-          element.style.top = pos + 'px';
-
-          if (pos === 0) {
-            element.classList.remove('up');
-            element.classList.add('down');
-          } else if (pos === this.maxHeight) {
-            element.classList.remove('down');
-            element.classList.add('up');
-          }
-          break;
+          return this.updateOptWithrAFState(element, isLast);
         case 'optWithKeyFrame':
-          pos = parseInt(element.style.top.replace(/\px/, ''));
-          pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
-          pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
-          element.style.top = pos + 'px';
-
-          if (pos === 0) {
-            element.classList.remove('up');
-            element.classList.add('down');
-          } else if (pos === this.maxHeight) {
-            element.classList.remove('down');
-            element.classList.add('up');
-          }
-          break;
+          return this.updateOptWithKeyFrameState(element);
         default:
-          break;
+          return;
       }
     }
-    if (this.animationState !== 'optWithKeyFrame') this.frame = window.requestAnimationFrame(this.update.bind(this));
+  }
+  updateIdleState(element, isLast) {
+    let pos = element.classList.contains('down') ? element.offsetTop + ENUM.distance : element.offsetTop - ENUM.distance;
+    if (pos < 0) pos = 0;
+    else if (pos > this.maxHeight) pos = this.maxHeight;
+    element.style.top = pos + 'px';
+
+    if (element.offsetTop === 0) {
+      element.classList.remove('up');
+      element.classList.add('down');
+    } else if (element.offsetTop === this.maxHeight) {
+      element.classList.remove('down');
+      element.classList.add('up');
+    }
+    if (isLast) this.frame = window.requestAnimationFrame(this.update.bind(this));
+  }
+  updateOptWithrAFState(element, isLast) {
+    let pos = parseInt(element.style.top.replace(/\px/, ''));
+    pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
+    pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
+    element.style.top = pos + 'px';
+
+    if (pos === 0) {
+      element.classList.remove('up');
+      element.classList.add('down');
+    } else if (pos === this.maxHeight) {
+      element.classList.remove('down');
+      element.classList.add('up');
+    }
+
+    if (isLast) this.frame = window.requestAnimationFrame(this.update.bind(this));
+  }
+  updateOptWithKeyFrameState(element) {
+    let pos = parseInt(element.style.top.replace(/\px/, ''));
+    pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
+    pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
+    element.style.top = pos + 'px';
+
+    if (pos === 0) {
+      element.classList.remove('up');
+      element.classList.add('down');
+    } else if (pos === this.maxHeight) {
+      element.classList.remove('down');
+      element.classList.add('up');
+    }
   }
 }
