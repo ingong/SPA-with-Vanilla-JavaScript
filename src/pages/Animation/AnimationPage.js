@@ -74,10 +74,8 @@ export default class AnimationPage {
     for (let index = 0; index < this.elementCount; index++) {
       const clonedNode = this.$proto.cloneNode();
       const top = this.animationState === 'optWithKeyFrame' ? this.maxHeight : Math.floor(Math.random() * this.maxHeight);
-
       if (top === this.maxHeight) clonedNode.classList.add('up');
       else clonedNode.classList.add('down');
-
       clonedNode.style.left = index / (this.elementCount / ENUM.maxWidth) + 'vw';
       clonedNode.style.top = top + 'px';
       this.$root.appendChild(clonedNode);
@@ -115,7 +113,7 @@ export default class AnimationPage {
           this.isWorking = false;
           break;
         case 'optWithKeyFrame':
-          document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
+          this.removeKeyFrameAnimation();
           target.textContent = 'Start';
           this.isWorking = false;
           break;
@@ -137,24 +135,19 @@ export default class AnimationPage {
         case 'optWithKeyFrame':
           target.textContent = 'Stop';
           this.isWorking = true;
-          document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+          this.addKeyFrameAnimation();
           break;
         default:
           return;
       }
     }
   }
-
-  changeSubtractBtnStatus() {
-    if (this.elementCount <= ENUM.minimum) this.$subtractBtn.disabled = true;
-    else this.$subtractBtn.disabled = false;
-  }
   handleAddBtn() {
     this.elementCount += ENUM.incrementor;
     this.animationState !== 'optWithKeyFrame' && cancelAnimationFrame(this.frame);
     this.initApp.apply(this);
     this.animationState !== 'optWithKeyFrame' && this.initFrameWithrAF();
-    this.animationState === 'optWithKeyFrame' && document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+    this.animationState === 'optWithKeyFrame' && this.addKeyFrameAnimation();
     this.changeSubtractBtnStatus();
   }
   handleSubtractBtn() {
@@ -162,7 +155,7 @@ export default class AnimationPage {
     this.animationState !== 'optWithKeyFrame' && cancelAnimationFrame(this.frame);
     this.initApp.apply(this);
     this.animationState !== 'optWithKeyFrame' && this.initFrameWithrAF();
-    this.animationState === 'optWithKeyFrame' && document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+    this.animationState === 'optWithKeyFrame' && this.addKeyFrameAnimation();
     this.changeSubtractBtnStatus();
   }
   handleResize() {
@@ -183,22 +176,16 @@ export default class AnimationPage {
 
     switch (type) {
       case 'idle':
-        if (this.animationState === 'optWithrAF') {
-          cancelAnimationFrame(this.frame);
-        } else if (this.animationState === 'optWithkeyFrame') {
-          document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
-        }
+        if (this.animationState === 'optWithrAF') cancelAnimationFrame(this.frame);
+        else if (this.animationState === 'optWithkeyFrame') this.removeKeyFrameAnimation();
         this.animationState = 'idle';
         this.$idleBtn.disabled = true;
         this.initApp.apply(this);
         this.initFrameWithrAF();
         break;
       case 'optWithrAF':
-        if (this.animationState === 'idle') {
-          cancelAnimationFrame(this.frame);
-        } else if (this.animationState === 'optWithkeyFrame') {
-          document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
-        }
+        if (this.animationState === 'idle') cancelAnimationFrame(this.frame);
+        else if (this.animationState === 'optWithkeyFrame') this.removeKeyFrameAnimation();
         this.animationState = 'optWithrAF';
         this.$optWithrAFBtn.disabled = true;
         this.initApp.apply(this);
@@ -209,7 +196,7 @@ export default class AnimationPage {
         this.animationState = 'optWithKeyFrame';
         this.$optWithKeyFrameBtn.disabled = true;
         this.initApp.apply(this);
-        document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+        this.addKeyFrameAnimation();
         break;
       default:
         break;
@@ -240,7 +227,6 @@ export default class AnimationPage {
     if (pos < 0) pos = 0;
     else if (pos > this.maxHeight) pos = this.maxHeight;
     element.style.top = pos + 'px';
-
     if (element.offsetTop === 0) {
       element.classList.remove('up');
       element.classList.add('down');
@@ -255,7 +241,6 @@ export default class AnimationPage {
     pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
     pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
     element.style.top = pos + 'px';
-
     if (pos === 0) {
       element.classList.remove('up');
       element.classList.add('down');
@@ -263,21 +248,19 @@ export default class AnimationPage {
       element.classList.remove('down');
       element.classList.add('up');
     }
-
     if (isLast) this.initFrameWithrAF();
   }
   updateOptWithKeyFrameState(element) {
-    let pos = parseInt(element.style.top.replace(/\px/, ''));
-    pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
-    pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
     element.style.top = '0px';
-
-    if (pos === 0) {
-      element.classList.remove('up');
-      element.classList.add('down');
-    } else if (pos === this.maxHeight) {
-      element.classList.remove('down');
-      element.classList.add('up');
-    }
+  }
+  addKeyFrameAnimation() {
+    document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+  }
+  removeKeyFrameAnimation() {
+    document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
+  }
+  changeSubtractBtnStatus() {
+    if (this.elementCount <= ENUM.minimum) this.$subtractBtn.disabled = true;
+    else this.$subtractBtn.disabled = false;
   }
 }
