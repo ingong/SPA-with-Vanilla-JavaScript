@@ -27,6 +27,15 @@ body {
 .subtract:disabled {
   opacity: 0.2;
 }
+.unOptimize:disabled {
+  opacity: 0.2;
+}
+.optimizeWithrAF:disabled {
+  opacity: 0.2;
+}
+.optimizeWithKeyFrame:disabled {
+  opacity: 0.2;
+}
 
 .mover {
   height: 3vw;
