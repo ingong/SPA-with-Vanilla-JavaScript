@@ -85,6 +85,7 @@ export default class AnimationPage {
     this.movers = document.querySelectorAll('.mover');
   }
   initFrameWithrAF() {
+    this.frame && cancelAnimationFrame(this.frame);
     this.frame = window.requestAnimationFrame(this.update.bind(this));
   }
   addEvent() {
@@ -143,21 +144,26 @@ export default class AnimationPage {
       }
     }
   }
-  handleAddBtn() {
-    cancelAnimationFrame(this.frame);
-    this.elementCount += ENUM.incrementor;
-    this.initApp.apply(this);
-    if (this.elementCount > ENUM.minimum) this.$subtractBtn.disabled = false;
-    else this.$subtractBtn.disabled = true;
-    this.initFrameWithrAF();
-  }
-  handleSubtractBtn() {
-    cancelAnimationFrame(this.frame);
-    this.elementCount -= ENUM.incrementor;
-    this.initApp.apply(this);
+
+  changeSubtractBtnStatus() {
     if (this.elementCount <= ENUM.minimum) this.$subtractBtn.disabled = true;
     else this.$subtractBtn.disabled = false;
-    this.frame = requestAnimationFrame(this.update.bind(this));
+  }
+  handleAddBtn() {
+    this.elementCount += ENUM.incrementor;
+    this.animationState !== 'optWithKeyFrame' && cancelAnimationFrame(this.frame);
+    this.initApp.apply(this);
+    this.animationState !== 'optWithKeyFrame' && this.initFrameWithrAF();
+    this.animationState === 'optWithKeyFrame' && document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+    this.changeSubtractBtnStatus();
+  }
+  handleSubtractBtn() {
+    this.elementCount -= ENUM.incrementor;
+    this.animationState !== 'optWithKeyFrame' && cancelAnimationFrame(this.frame);
+    this.initApp.apply(this);
+    this.animationState !== 'optWithKeyFrame' && this.initFrameWithrAF();
+    this.animationState === 'optWithKeyFrame' && document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+    this.changeSubtractBtnStatus();
   }
   handleResize() {
     if (this.isWorking && this.animationState !== 'optWithKeyFrame') {
@@ -172,6 +178,9 @@ export default class AnimationPage {
     else if (this.$optWithKeyFrameBtn.disabled) this.$optWithKeyFrameBtn.disabled = false;
 
     const type = target.textContent;
+    this.$stopBtn.textContent = 'Stop';
+    this.isWorking = true;
+
     switch (type) {
       case 'idle':
         if (this.animationState === 'optWithrAF') {
@@ -261,7 +270,7 @@ export default class AnimationPage {
     let pos = parseInt(element.style.top.replace(/\px/, ''));
     pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
     pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
-    element.style.top = pos + 'px';
+    element.style.top = '0px';
 
     if (pos === 0) {
       element.classList.remove('up');
