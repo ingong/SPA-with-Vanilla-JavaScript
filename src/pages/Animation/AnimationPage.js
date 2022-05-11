@@ -15,6 +15,9 @@ export default class AnimationPage {
     this.isOptimize = false;
     this.isWorking = true;
 
+    // UnOptimize, OptimizeWithrAF, OptimizeWithKeyFrame
+    this.OptimizedState = 'UnOptimize';
+
     this.$root = document.querySelector('#root');
     this.initBaseTemplate();
     this.$proto = document.querySelector('.proto');
@@ -30,8 +33,8 @@ export default class AnimationPage {
 
     this.addEvent();
     this.setup();
-    this.initApp();
-    this.initFrame();
+    this.initAppWithrAF();
+    this.initFrameWithrAF();
   }
 
   setup() {
@@ -48,7 +51,9 @@ export default class AnimationPage {
         <button class="add"></button>
         <button class="subtract" disabled></button>
         <button class="stop">Stop</button>
-        <button class="optimize">Optimize</button>
+        <button class="optimizeWithrAF">optimizeWithrAF</button>
+        <button class="optimizeWithKeyFrame">optimizeWithKeyFrame</button>
+        <button class="unOptimize">unOptimize</button>
         <a href=https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/"
           target="_blank">
           <button class="optimize">Help</button>
@@ -58,7 +63,7 @@ export default class AnimationPage {
     this.$root.insertAdjacentHTML('beforeend', template);
   }
 
-  initApp() {
+  initAppWithrAF() {
     this.bodySize = document.body.getBoundingClientRect();
     this.ballSize = this.$proto.getBoundingClientRect();
     this.maxHeight = Math.floor(this.bodySize.height - this.ballSize.height);
@@ -75,7 +80,8 @@ export default class AnimationPage {
     for (let index = 0; index < this.elementCount; index++) {
       const clonedNode = this.$proto.cloneNode();
       const top = Math.floor(Math.random() * this.maxHeight);
-
+      // const top = this.maxHeight;
+      // console.log(this.maxHeight);
       if (top === this.maxHeight) clonedNode.classList.add('up');
       else clonedNode.classList.add('down');
 
@@ -85,7 +91,7 @@ export default class AnimationPage {
     }
     this.movers = document.querySelectorAll('.mover');
   }
-  initFrame() {
+  initFrameWithrAF() {
     this.frame = window.requestAnimationFrame(this.update.bind(this));
   }
   handleStop({ target }) {
@@ -109,17 +115,19 @@ export default class AnimationPage {
     }
   }
   handleAddBtn() {
-    cancelAnimationFrame(this.frame);
+    // 상태
+    this.frame && cancelAnimationFrame(this.frame);
     this.elementCount += ENUM.incrementor;
-    this.initApp.apply(this);
+    this.initAppWithrAF.apply(this);
     if (this.elementCount > ENUM.minimum) this.$subtract.disabled = false;
     else this.$subtract.disabled = true;
     this.frame = requestAnimationFrame(this.update.bind(this));
   }
   handleSubtractBtn() {
-    cancelAnimationFrame(this.frame);
+    // 상태
+    this.frame && cancelAnimationFrame(this.frame);
     this.elementCount -= ENUM.incrementor;
-    this.initApp.apply(this);
+    this.initAppWithrAF.apply(this);
     if (this.elementCount <= ENUM.minimum) this.$subtract.disabled = true;
     else this.$subtract.disabled = false;
     this.frame = requestAnimationFrame(this.update.bind(this));
@@ -127,13 +135,14 @@ export default class AnimationPage {
   handleResize() {
     if (this.isWorking) {
       cancelAnimationFrame(this.frame);
-      this.initApp.apply(this);
+      this.initAppWithrAF.apply(this);
       this.frame = requestAnimationFrame(this.update.bind(this));
     }
   }
   addEvent() {
+    // 3개의 버튼에 대한 수정해야함
     document.querySelector('.stop').addEventListener('click', this.handleStop.bind(this));
-    document.querySelector('.optimize').addEventListener('click', this.handleOptimize.bind(this));
+    // document.querySelector('.optimize').addEventListener('click', this.handleOptimize.bind(this));
     this.$add.addEventListener('click', this.handleAddBtn.bind(this));
     this.$subtract.addEventListener('click', this.handleSubtractBtn.bind(this));
     window.addEventListener(
@@ -143,6 +152,7 @@ export default class AnimationPage {
     window.addEventListener('popstate', () => cancelAnimationFrame(this.frame));
   }
   update() {
+    // 상태
     for (let index = 0; index < this.elementCount; index++) {
       const element = this.movers[index];
       if (!this.isOptimize) {
@@ -159,11 +169,9 @@ export default class AnimationPage {
           element.classList.add('up');
         }
       } else {
-        let pos = parseInt(element.style.top.slice(0, element.style.top.indexOf('px')));
-        pos = element.classList.contains('down') ? (pos += ENUM.distance) : (pos -= ENUM.distance);
-
-        if (pos < 0) pos = 0;
-        else if (pos > this.maxHeight) pos = this.maxHeight;
+        let pos = parseInt(element.style.top.replace(/\px/, ''));
+        pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
+        pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
         element.style.top = pos + 'px';
 
         if (pos === 0) {
