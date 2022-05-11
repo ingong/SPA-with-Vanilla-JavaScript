@@ -19,7 +19,7 @@ export default class AnimationPage {
     this.$root = document.querySelector('#root');
     this.initBaseTemplate();
     this.$proto = document.querySelector('.proto');
-    this.$stopBtn = document.querySelector('.stop');
+    this.$isWorkingBtn = document.querySelector('.isWorking');
     this.$subtractBtn = document.querySelector('.subtract');
     this.$addBtn = document.querySelector('.add');
     this.$idleBtn = document.querySelector('.idle');
@@ -49,7 +49,7 @@ export default class AnimationPage {
       <div class="controls">
         <button class="add"></button>
         <button class="subtract" disabled></button>
-        <button class="stop">Stop</button>
+        <button class="isWorking">Stop</button>
         <button class="idle" disabled>idle</button>
         <button class="optWithrAF">optWithrAF</button>
         <button class="optWithKeyFrame">optWithKeyFrame</button>
@@ -87,7 +87,7 @@ export default class AnimationPage {
     this.frame = window.requestAnimationFrame(this.update.bind(this));
   }
   addEvent() {
-    this.$stopBtn.addEventListener('click', this.handleisWorking.bind(this));
+    this.$isWorkingBtn.addEventListener('click', this.handleisWorking.bind(this));
     this.$addBtn.addEventListener('click', this.handleAddBtn.bind(this));
     this.$subtractBtn.addEventListener('click', this.handleSubtractBtn.bind(this));
     this.$idleBtn.addEventListener('click', this.handleOptimize.bind(this));
@@ -101,49 +101,23 @@ export default class AnimationPage {
   }
   handleisWorking({ target }) {
     if (this.isWorking) {
-      switch (this.animationState) {
-        case 'idle':
-          cancelAnimationFrame(this.frame);
-          target.textContent = 'Start';
-          this.isWorking = false;
-          break;
-        case 'optWithrAF':
-          cancelAnimationFrame(this.frame);
-          target.textContent = 'Start';
-          this.isWorking = false;
-          break;
-        case 'optWithKeyFrame':
-          this.removeKeyFrameAnimation();
-          target.textContent = 'Start';
-          this.isWorking = false;
-          break;
-        default:
-          return;
-      }
+      this.animationState === 'idle' && cancelAnimationFrame(this.frame);
+      this.animationState === 'optWithrAF' && cancelAnimationFrame(this.frame);
+      this.animationState === 'optWithKeyFrame' && this.removeKeyFrameAnimation();
+      target.textContent = 'Start';
+      this.isWorking = false;
     } else {
-      switch (this.animationState) {
-        case 'idle':
-          this.initFrameWithrAF();
-          target.textContent = 'Stop';
-          this.isWorking = true;
-          break;
-        case 'optWithrAF':
-          this.initFrameWithrAF();
-          target.textContent = 'Stop';
-          this.isWorking = true;
-          break;
-        case 'optWithKeyFrame':
-          target.textContent = 'Stop';
-          this.isWorking = true;
-          this.addKeyFrameAnimation();
-          break;
-        default:
-          return;
-      }
+      this.animationState === 'idle' && this.initFrameWithrAF();
+      this.animationState === 'optWithrAF' && this.initFrameWithrAF();
+      this.animationState === 'optWithKeyFrame' && this.addKeyFrameAnimation();
+      target.textContent = 'Stop';
+      this.isWorking = true;
     }
   }
   handleAddBtn() {
     this.elementCount += ENUM.incrementor;
+    this.$isWorkingBtn.textContent = 'Stop';
+    this.isWorking = true;
     this.animationState !== 'optWithKeyFrame' && cancelAnimationFrame(this.frame);
     this.initApp.apply(this);
     this.animationState !== 'optWithKeyFrame' && this.initFrameWithrAF();
@@ -152,6 +126,8 @@ export default class AnimationPage {
   }
   handleSubtractBtn() {
     this.elementCount -= ENUM.incrementor;
+    this.$isWorkingBtn.textContent = 'Stop';
+    this.isWorking = true;
     this.animationState !== 'optWithKeyFrame' && cancelAnimationFrame(this.frame);
     this.initApp.apply(this);
     this.animationState !== 'optWithKeyFrame' && this.initFrameWithrAF();
@@ -169,23 +145,22 @@ export default class AnimationPage {
     if (this.$idleBtn.disabled) this.$idleBtn.disabled = false;
     else if (this.$optWithrAFBtn.disabled) this.$optWithrAFBtn.disabled = false;
     else if (this.$optWithKeyFrameBtn.disabled) this.$optWithKeyFrameBtn.disabled = false;
-
     const type = target.textContent;
-    this.$stopBtn.textContent = 'Stop';
+    this.$isWorkingBtn.textContent = 'Stop';
     this.isWorking = true;
 
     switch (type) {
       case 'idle':
-        if (this.animationState === 'optWithrAF') cancelAnimationFrame(this.frame);
-        else if (this.animationState === 'optWithkeyFrame') this.removeKeyFrameAnimation();
+        this.animationState === 'optWithrAF' && cancelAnimationFrame(this.frame);
+        this.animationState === 'optWithkeyFrame' && this.removeKeyFrameAnimation();
         this.animationState = 'idle';
         this.$idleBtn.disabled = true;
         this.initApp.apply(this);
         this.initFrameWithrAF();
         break;
       case 'optWithrAF':
-        if (this.animationState === 'idle') cancelAnimationFrame(this.frame);
-        else if (this.animationState === 'optWithkeyFrame') this.removeKeyFrameAnimation();
+        this.animationState === 'idle' && cancelAnimationFrame(this.frame);
+        this.animationState === 'optWithkeyFrame' && this.removeKeyFrameAnimation();
         this.animationState = 'optWithrAF';
         this.$optWithrAFBtn.disabled = true;
         this.initApp.apply(this);
@@ -199,7 +174,7 @@ export default class AnimationPage {
         this.addKeyFrameAnimation();
         break;
       default:
-        break;
+        return;
     }
   }
 
@@ -224,8 +199,8 @@ export default class AnimationPage {
   }
   updateIdleState(element, isLast) {
     let pos = element.classList.contains('down') ? element.offsetTop + ENUM.distance : element.offsetTop - ENUM.distance;
-    if (pos < 0) pos = 0;
-    else if (pos > this.maxHeight) pos = this.maxHeight;
+    pos = pos > this.maxHeight ? this.maxHeight : pos;
+    pos = pos < 0 ? 0 : pos;
     element.style.top = pos + 'px';
     if (element.offsetTop === 0) {
       element.classList.remove('up');
@@ -239,7 +214,8 @@ export default class AnimationPage {
   updateOptWithrAFState(element, isLast) {
     let pos = parseInt(element.style.top.replace(/\px/, ''));
     pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
-    pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
+    pos = pos > this.maxHeight ? this.maxHeight : pos;
+    pos = pos < 0 ? 0 : pos;
     element.style.top = pos + 'px';
     if (pos === 0) {
       element.classList.remove('up');
