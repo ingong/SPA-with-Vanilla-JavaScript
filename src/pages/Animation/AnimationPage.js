@@ -50,9 +50,9 @@ export default class AnimationPage {
         <button class="add"></button>
         <button class="subtract" disabled></button>
         <button class="stop">Stop</button>
+        <button class="idle" disabled>idle</button>
         <button class="optWithrAF">optWithrAF</button>
         <button class="optWithKeyFrame">optWithKeyFrame</button>
-        <button class="idle" disabled>idle</button>
       </div>
     `;
     this.$root.insertAdjacentHTML('beforeend', template);
@@ -74,7 +74,6 @@ export default class AnimationPage {
     for (let index = 0; index < this.elementCount; index++) {
       const clonedNode = this.$proto.cloneNode();
       const top = this.animationState === 'optWithKeyFrame' ? this.maxHeight : Math.floor(Math.random() * this.maxHeight);
-      console.log('top', top);
 
       if (top === this.maxHeight) clonedNode.classList.add('up');
       else clonedNode.classList.add('down');
@@ -106,20 +105,26 @@ export default class AnimationPage {
     if (this.$optWithKeyFrameBtn.disabled) this.$optWithKeyFrameBtn.disabled = false;
     switch (type) {
       case 'idle':
-        // optWithrAF -> idle : 아무것도 안함
-        // keyFrame -> idle : 애니메이션 제거
-        // 상태 변경
-        this.$idleBtn.disabled = true;
-        if (this.animationState === 'optWithkeyFrame') {
+        if (this.animationState === 'optWithrAF') {
+          cancelAnimationFrame(this.frame);
+        } else if (this.animationState === 'optWithkeyFrame') {
           document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
         }
         this.animationState = 'idle';
+        this.$idleBtn.disabled = true;
+        this.initApp.apply(this);
+        this.initFrameWithrAF();
         break;
       case 'optWithrAF':
-        // idle -> optWithrAF : 아무것도 안함
-        // keyFrame -> optWithrAF : animation 제거
-        // 상태 변경
+        if (this.animationState === 'idle') {
+          cancelAnimationFrame(this.frame);
+        } else if (this.animationState === 'optWithkeyFrame') {
+          document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
+        }
+        this.animationState = 'optWithrAF';
         this.$optWithrAFBtn.disabled = true;
+        this.initApp.apply(this);
+        this.initFrameWithrAF();
         break;
       case 'optWithKeyFrame':
         cancelAnimationFrame(this.frame);
