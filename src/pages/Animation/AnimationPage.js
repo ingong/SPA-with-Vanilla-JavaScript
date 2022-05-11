@@ -87,15 +87,83 @@ export default class AnimationPage {
   initFrameWithrAF() {
     this.frame = window.requestAnimationFrame(this.update.bind(this));
   }
-  handleStop({ target }) {
+  addEvent() {
+    this.$stopBtn.addEventListener('click', this.handleisWorking.bind(this));
+    this.$addBtn.addEventListener('click', this.handleAddBtn.bind(this));
+    this.$subtractBtn.addEventListener('click', this.handleSubtractBtn.bind(this));
+    this.$idleBtn.addEventListener('click', this.handleOptimize.bind(this));
+    this.$optWithrAFBtn.addEventListener('click', this.handleOptimize.bind(this));
+    this.$optWithKeyFrameBtn.addEventListener('click', this.handleOptimize.bind(this));
+    window.addEventListener(
+      'resize',
+      debounce(() => this.handleResize.apply(this), 500),
+    );
+    window.addEventListener('popstate', () => cancelAnimationFrame(this.frame));
+  }
+  handleisWorking({ target }) {
     if (this.isWorking) {
-      cancelAnimationFrame(this.frame);
-      target.textContent = 'Start';
-      this.isWorking = false;
+      switch (this.animationState) {
+        case 'idle':
+          cancelAnimationFrame(this.frame);
+          target.textContent = 'Start';
+          this.isWorking = false;
+          break;
+        case 'optWithrAF':
+          cancelAnimationFrame(this.frame);
+          target.textContent = 'Start';
+          this.isWorking = false;
+          break;
+        case 'optWithKeyFrame':
+          document.querySelectorAll('.mover').forEach((node) => node.classList.remove('csskeyframe'));
+          target.textContent = 'Start';
+          this.isWorking = false;
+          break;
+        default:
+          return;
+      }
     } else {
-      this.frame = window.requestAnimationFrame(this.update.bind(this));
-      target.textContent = 'Stop';
-      this.isWorking = true;
+      switch (this.animationState) {
+        case 'idle':
+          this.initFrameWithrAF();
+          target.textContent = 'Stop';
+          this.isWorking = true;
+          break;
+        case 'optWithrAF':
+          this.initFrameWithrAF();
+          target.textContent = 'Stop';
+          this.isWorking = true;
+          break;
+        case 'optWithKeyFrame':
+          target.textContent = 'Stop';
+          this.isWorking = true;
+          document.querySelectorAll('.mover').forEach((node) => node.classList.add('csskeyframe'));
+          break;
+        default:
+          return;
+      }
+    }
+  }
+  handleAddBtn() {
+    cancelAnimationFrame(this.frame);
+    this.elementCount += ENUM.incrementor;
+    this.initApp.apply(this);
+    if (this.elementCount > ENUM.minimum) this.$subtractBtn.disabled = false;
+    else this.$subtractBtn.disabled = true;
+    this.initFrameWithrAF();
+  }
+  handleSubtractBtn() {
+    cancelAnimationFrame(this.frame);
+    this.elementCount -= ENUM.incrementor;
+    this.initApp.apply(this);
+    if (this.elementCount <= ENUM.minimum) this.$subtractBtn.disabled = true;
+    else this.$subtractBtn.disabled = false;
+    this.frame = requestAnimationFrame(this.update.bind(this));
+  }
+  handleResize() {
+    if (this.isWorking && this.animationState !== 'optWithKeyFrame') {
+      cancelAnimationFrame(this.frame);
+      this.initApp.apply(this);
+      this.initFrameWithrAF();
     }
   }
   handleOptimize({ target }) {
@@ -138,44 +206,6 @@ export default class AnimationPage {
         break;
     }
   }
-  handleAddBtn() {
-    // 상태
-    cancelAnimationFrame(this.frame);
-    this.elementCount += ENUM.incrementor;
-    this.initApp.apply(this);
-    if (this.elementCount > ENUM.minimum) this.$subtract.disabled = false;
-    else this.$subtract.disabled = true;
-    this.frame = requestAnimationFrame(this.update.bind(this));
-  }
-  handleSubtractBtn() {
-    // 상태
-    cancelAnimationFrame(this.frame);
-    this.elementCount -= ENUM.incrementor;
-    this.initApp.apply(this);
-    if (this.elementCount <= ENUM.minimum) this.$subtract.disabled = true;
-    else this.$subtract.disabled = false;
-    this.frame = requestAnimationFrame(this.update.bind(this));
-  }
-  handleResize() {
-    if (this.isWorking && this.animationState !== 'optWithKeyFrame') {
-      cancelAnimationFrame(this.frame);
-      this.initApp.apply(this);
-      this.frame = requestAnimationFrame(this.update.bind(this));
-    }
-  }
-  addEvent() {
-    this.$stopBtn.addEventListener('click', this.handleStop.bind(this));
-    this.$addBtn.addEventListener('click', this.handleAddBtn.bind(this));
-    this.$subtractBtn.addEventListener('click', this.handleSubtractBtn.bind(this));
-    this.$idleBtn.addEventListener('click', this.handleOptimize.bind(this));
-    this.$optWithrAFBtn.addEventListener('click', this.handleOptimize.bind(this));
-    this.$optWithKeyFrameBtn.addEventListener('click', this.handleOptimize.bind(this));
-    window.addEventListener(
-      'resize',
-      debounce(() => this.handleResize.apply(this), 500),
-    );
-    window.addEventListener('popstate', () => cancelAnimationFrame(this.frame));
-  }
 
   update() {
     for (let index = 0; index < this.elementCount; index++) {
@@ -183,11 +213,14 @@ export default class AnimationPage {
       const isLast = index === this.elementCount - 1;
       switch (this.animationState) {
         case 'idle':
-          return this.updateIdleState(element, isLast);
+          this.updateIdleState(element, isLast);
+          break;
         case 'optWithrAF':
-          return this.updateOptWithrAFState(element, isLast);
+          this.updateOptWithrAFState(element, isLast);
+          break;
         case 'optWithKeyFrame':
-          return this.updateOptWithKeyFrameState(element);
+          this.updateOptWithKeyFrameState(element);
+          break;
         default:
           return;
       }
@@ -206,7 +239,7 @@ export default class AnimationPage {
       element.classList.remove('down');
       element.classList.add('up');
     }
-    if (isLast) this.frame = window.requestAnimationFrame(this.update.bind(this));
+    if (isLast) this.initFrameWithrAF();
   }
   updateOptWithrAFState(element, isLast) {
     let pos = parseInt(element.style.top.replace(/\px/, ''));
@@ -222,7 +255,7 @@ export default class AnimationPage {
       element.classList.add('up');
     }
 
-    if (isLast) this.frame = window.requestAnimationFrame(this.update.bind(this));
+    if (isLast) this.initFrameWithrAF();
   }
   updateOptWithKeyFrameState(element) {
     let pos = parseInt(element.style.top.replace(/\px/, ''));
