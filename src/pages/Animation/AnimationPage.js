@@ -14,15 +14,17 @@ export default class AnimationPage {
     this.elementCount = ENUM.minimum;
     this.isOptimize = false;
     this.isWorking = true;
-
-    // unOptimize, optimizeWithrAF, optimizeWithKeyFrame
-    this.animationState = 'unOptimize';
+    this.animationState = 'idle';
 
     this.$root = document.querySelector('#root');
     this.initBaseTemplate();
     this.$proto = document.querySelector('.proto');
-    this.$subtract = document.querySelector('.subtract');
-    this.$add = document.querySelector('.add');
+    this.$stopBtn = document.querySelector('.stop');
+    this.$subtractBtn = document.querySelector('.subtract');
+    this.$addBtn = document.querySelector('.add');
+    this.$idleBtn = document.querySelector('.idle');
+    this.$optWithrAFBtn = document.querySelector('.optWithrAF');
+    this.$optWithKeyFrameBtn = document.querySelector('.optWithKeyFrame');
 
     this.movers;
     this.frame;
@@ -33,17 +35,14 @@ export default class AnimationPage {
 
     this.addEvent();
     this.setup();
-    this.initAppWithrAF();
+    this.initApp();
     this.initFrameWithrAF();
   }
-
   setup() {
-    this.$add.textContent = 'Add ' + ENUM.incrementor;
-    this.$subtract.textContent = 'Subtract ' + ENUM.incrementor;
+    this.$addBtn.textContent = 'Add ' + ENUM.incrementor;
+    this.$subtractBtn.textContent = 'Subtract ' + ENUM.incrementor;
     this.$root.removeChild(this.$proto);
-    this.$proto.classList.remove('.proto');
   }
-
   initBaseTemplate() {
     const template = `
       <img class="proto mover" src=${BaseBallImg}/>
@@ -51,19 +50,14 @@ export default class AnimationPage {
         <button class="add"></button>
         <button class="subtract" disabled></button>
         <button class="stop">Stop</button>
-        <button class="optimizeWithrAF">optimizeWithrAF</button>
-        <button class="optimizeWithKeyFrame">optimizeWithKeyFrame</button>
-        <button class="unOptimize">unOptimize</button>
-        <a href=https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/"
-          target="_blank">
-          <button class="optimize">Help</button>
-        </a>
+        <button class="optWithrAF">optWithrAF</button>
+        <button class="optWithKeyFrame">optWithKeyFrame</button>
+        <button class="idle" disabled>idle</button>
       </div>
     `;
     this.$root.insertAdjacentHTML('beforeend', template);
   }
-
-  initAppWithrAF() {
+  initApp() {
     this.bodySize = document.body.getBoundingClientRect();
     this.ballSize = this.$proto.getBoundingClientRect();
     this.maxHeight = Math.floor(this.bodySize.height - this.ballSize.height);
@@ -79,7 +73,8 @@ export default class AnimationPage {
 
     for (let index = 0; index < this.elementCount; index++) {
       const clonedNode = this.$proto.cloneNode();
-      const top = this.animationState === 'optimizeWithKeyFrame' ? this.maxHeight : Math.floor(Math.random() * this.maxHeight);
+      const top = this.animationState === 'optWithKeyFrame' ? this.maxHeight : Math.floor(Math.random() * this.maxHeight);
+      console.log('top', top);
 
       if (top === this.maxHeight) clonedNode.classList.add('up');
       else clonedNode.classList.add('down');
@@ -104,60 +99,58 @@ export default class AnimationPage {
       this.isWorking = true;
     }
   }
-  handleOptimize({ target }) {
-    if (target.textContent === 'Optimize') {
-      this.isOptimize = true;
-      target.textContent = 'Un-Optimize';
-    } else {
-      this.isOptimize = false;
-      target.textContent = 'Optimize';
-    }
-  }
+  handleOptimize({ target }) {}
   handleAddBtn() {
     // 상태
-    this.frame && cancelAnimationFrame(this.frame);
+    cancelAnimationFrame(this.frame);
     this.elementCount += ENUM.incrementor;
-    this.initAppWithrAF.apply(this);
+    this.initApp.apply(this);
     if (this.elementCount > ENUM.minimum) this.$subtract.disabled = false;
     else this.$subtract.disabled = true;
     this.frame = requestAnimationFrame(this.update.bind(this));
   }
   handleSubtractBtn() {
     // 상태
-    this.frame && cancelAnimationFrame(this.frame);
+    cancelAnimationFrame(this.frame);
     this.elementCount -= ENUM.incrementor;
-    this.initAppWithrAF.apply(this);
+    this.initApp.apply(this);
     if (this.elementCount <= ENUM.minimum) this.$subtract.disabled = true;
     else this.$subtract.disabled = false;
     this.frame = requestAnimationFrame(this.update.bind(this));
   }
   handleResize() {
-    if (this.isWorking) {
+    if (this.isWorking && this.animationState !== 'optWithKeyFrame') {
       cancelAnimationFrame(this.frame);
-      this.initAppWithrAF.apply(this);
+      this.initApp.apply(this);
       this.frame = requestAnimationFrame(this.update.bind(this));
     }
   }
   addEvent() {
-    // 3개의 버튼에 대한 수정해야함
-    document.querySelector('.stop').addEventListener('click', this.handleStop.bind(this));
-    // document.querySelector('.optimize').addEventListener('click', this.handleOptimize.bind(this));
-    this.$add.addEventListener('click', this.handleAddBtn.bind(this));
-    this.$subtract.addEventListener('click', this.handleSubtractBtn.bind(this));
+    this.$stopBtn.addEventListener('click', this.handleStop.bind(this));
+    this.$addBtn.addEventListener('click', this.handleAddBtn.bind(this));
+    this.$subtractBtn.addEventListener('click', this.handleSubtractBtn.bind(this));
+    this.$idleBtn.addEventListener('click', this.handleOptimize.bind(this));
+    this.$optWithrAFBtn.addEventListener('click', this.handleOptimize.bind(this));
+    this.$optWithKeyFrameBtn.addEventListener('click', this.handleOptimize.bind(this));
     window.addEventListener(
       'resize',
       debounce(() => this.handleResize.apply(this), 500),
     );
     window.addEventListener('popstate', () => cancelAnimationFrame(this.frame));
   }
+
+  updateIdleState() {}
+  updateOptWithrAFState() {}
+  updateOptWithKeyFrameState() {}
+
   update() {
-    // 상태: unOptimize, optimizeWithrAF, optimizeWithKeyFrame
+    // 상태: idle, optWithrAF, optWithKeyFrame
     for (let index = 0; index < this.elementCount; index++) {
       const element = this.movers[index];
       let pos;
 
       switch (this.animationState) {
-        case 'unOptimize':
+        case 'idle':
           pos = element.classList.contains('down') ? element.offsetTop + ENUM.distance : element.offsetTop - ENUM.distance;
           if (pos < 0) pos = 0;
           else if (pos > this.maxHeight) pos = this.maxHeight;
@@ -171,7 +164,21 @@ export default class AnimationPage {
             element.classList.add('up');
           }
           break;
-        case 'optimizedWithrAF':
+        case 'optWithrAF':
+          pos = parseInt(element.style.top.replace(/\px/, ''));
+          pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
+          pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
+          element.style.top = pos + 'px';
+
+          if (pos === 0) {
+            element.classList.remove('up');
+            element.classList.add('down');
+          } else if (pos === this.maxHeight) {
+            element.classList.remove('down');
+            element.classList.add('up');
+          }
+          break;
+        case 'optWithKeyFrame':
           pos = parseInt(element.style.top.replace(/\px/, ''));
           pos = element.classList.contains('down') ? pos + ENUM.distance : pos - ENUM.distance;
           pos = pos < 0 ? 0 : pos > this.maxHeight ? this.maxHeight : pos;
@@ -189,6 +196,6 @@ export default class AnimationPage {
           break;
       }
     }
-    if (this.animationState !== 'optimizedWithKeyFrame') this.frame = window.requestAnimationFrame(this.update.bind(this));
+    if (this.animationState !== 'optWithKeyFrame') this.frame = window.requestAnimationFrame(this.update.bind(this));
   }
 }
