@@ -32,14 +32,22 @@
 
 ### 3. Animation 최적화
 
-- 크롬 예제 리팩토링을 통한 학습용 어플리케이션 (기존 ES5 방식 => 최신 JS 문법으로 개선)
-- requestAnimationFrame을 활용한 애니메이션 기능
-- 크롬 개발자 도구를 활용한 Runtime Performance 측정 및 개선
-- Optimize 버튼 클릭 시 강제 동기 레이아웃 방식 제거를 통한 렌더링 최적화
-  - Add 버튼 클릭 시 요소가 10개씩 추가되며 최소 100개의 요소가 화면에 존재할 때 성능 이슈를 모니터링할 수 있음.
+- 크롬 예제 리팩토링을 통한 학습용 어플리케이션입니다. (기존 ES5 방식 => 최신 JS 문법으로 개선)
+- requestAnimationFrame과 keyframe 각각 버전을 선택해서 애니메이션을 동작시킬 수 있습니다.
+- 크롬 개발자 도구를 활용한 Runtime Performance 측정 및 개선할 수 있습니다.
+- Add 버튼 클릭 시 요소가 10개씩 추가되며 최소 100개의 요소가 화면에 존재할 때 성능 이슈를 모니터링할 수 있습니다.
+- idle 버튼 클릭 시 강제 동기 레이아웃 방식으로 적용되는 requestAnimationFrame 방식을 사용합니다.
+- optWitrAF 버튼 클릭 시 강제 동기 레이아웃 방식을 제거한 requestAnimationFram 방식을 사용합니다.
+- optWitkeyframe 버튼 클릭 시 Animation Keyframe 방식을 사용합니다.
+- 첫 번째 이미지는 rAF를 활용한 애니메이션, 두 번째 이미지는 keyframe을 활용한 애니메이션입니다.
+<div>
+  <img src="/src/assets/readme/rAF.png" width="500">
+</div>
+<div>
+  <img src="/src/assets/readme/keyframe.png" width="500">
+</div>
 
 <br/>
-
 ## 실행 방법
 
 ```sh
