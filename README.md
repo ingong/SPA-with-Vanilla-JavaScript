@@ -39,15 +39,13 @@
 - idle 버튼 클릭 시 강제 동기 레이아웃 방식으로 적용되는 requestAnimationFrame 방식을 사용합니다.
 - optWitrAF 버튼 클릭 시 강제 동기 레이아웃 방식을 제거한 requestAnimationFram 방식을 사용합니다.
 - optWitkeyframe 버튼 클릭 시 Animation Keyframe 방식을 사용합니다.
-- 첫 번째 이미지는 rAF를 활용한 애니메이션, 두 번째 이미지는 keyframe을 활용한 애니메이션입니다.
 <div>
   <img src="/src/assets/readme/rAF.png" width="500">
 </div>
-<div>
-  <img src="/src/assets/readme/keyframe.png" width="500">
-</div>
+
 
 <br/>
+
 ## 실행 방법
 
 ```sh
